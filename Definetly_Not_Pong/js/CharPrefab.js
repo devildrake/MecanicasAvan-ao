@@ -1,8 +1,8 @@
 var definetlyNotPong = definetlyNotPong || {};
 
-definetlyNotPong.BallPrefab = function(game,x,y,level){
+definetlyNotPong.CharPrefab = function(game,x,y,level){
 
-	//Phaser.Sprite.call(this,game,x,y,"Ball");    
+	//Phaser.Sprite.call(this,game,x,y,"Nave");    
     this.scale.setTo(1);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
@@ -11,11 +11,11 @@ definetlyNotPong.BallPrefab = function(game,x,y,level){
 }
 
 
-definetlyNotPong.BallPrefab.prototype = Object.create(Phaser.Sprite.prototype);
+definetlyNotPong.CharPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 
-definetlyNotPong.BallPrefab.prototype.constructor = definetlyNotPong.BallPrefab;
+definetlyNotPong.CharPrefab.prototype.constructor = definetlyNotPong.CharPrefab;
 
-definetlyNotPong.BallPrefab.prototype.update = function(){
+definetlyNotPong.CharPrefab.prototype.update = function(){
         /*this.game.physics.arcade.overlap(this,,
         function(){
                         

@@ -8,6 +8,9 @@ definetlyNotPong.BallPrefab = function(game,x,y,level){
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
+    
+    this.velocityX=0;
+    this.velocityY=0;
 }
 
 
@@ -21,4 +24,21 @@ definetlyNotPong.BallPrefab.prototype.update = function(){
                         
                     
         } );*/
+    
+    if(this.position.x<=0){
+        
+        definetlyNotPong.BallPrefab.setVelocity(this.position.x,-this.position.y);
+    }
+    
+    if(this.position.x>=definetlyNotPong.game.gameWidth){
+        
+        definetlyNotPong.BallPrefab.setVelocity(this.position.x,-this.position.y);
+    }
+}
+
+definetlyNotPong.BallPrefab.setVelocity = function(x,y){
+    
+    this.velocityX=x;
+    this.velocityY=y;
+    
 }

@@ -5,6 +5,9 @@ definatelyNotPong.scene = {
         this.game.stage.backgroundColor = "#ffffff";
         this.load.image("RedLaser","img/RedLaser.png");
         this.load.image("GreenLaser","img/GreenLaser.png");
+         this.load.image("Barrier","img/Barrier.png");
+         this.load.image("Nave","img/player.png");
+         this.load.image("Ball","img/Ball.png");
         this.loadProjectiles();
         
     },
@@ -32,10 +35,15 @@ definatelyNotPong.scene = {
     this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         
+    this.ball = new definatelyNotPong.BallPrefab(this.game,100,100);
+    this.ball.enableBody=true;
+        //this.ball.x=
+        
     },
     
     update:function(){
         this.inputs();
+        //this.ball.update();
     },
     
     

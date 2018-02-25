@@ -2,15 +2,19 @@ var definatelyNotPong = definatelyNotPong || {};
 
 definatelyNotPong.BallPrefab = function(game,x,y,level){
 
-	//Phaser.Sprite.call(this,game,x,y,"Ball");    
+	Phaser.Sprite.call(this,game,100,100,"Ball");    
     this.scale.setTo(1);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
     
-    this.velocityX=0;
-    this.velocityY=0;
+    /*this.body.velocity.x=0;
+    this.body.velocity.y=0;
+    this.body.position.x=200;
+    this.body.position.y=500;*/
+   
+   
 }
 
 
@@ -23,17 +27,20 @@ definatelyNotPong.BallPrefab.prototype.update = function(){
         function(){
                         
                     
-        } );*/
+        } );
     
-    if(this.position.x<=0){
+    if(this.position.y<=0){
         
-        definatelyNotPong.BallPrefab.setVelocity(this.position.x,-this.position.y);
+        definatelyNotPong.BallPrefab.setVelocity(this.body.velocity.x,-this.body.velocity.y);
     }
     
-    if(this.position.x>=definatelyNotPong.game.gameWidth){
+    if(this.position.y>=definatelyNotPong.game.gameWidth){
         
-        definatelyNotPong.BallPrefab.setVelocity(this.position.x,-this.position.y);
+        definatelyNotPong.BallPrefab.setVelocity(this.body.velocity.x,-this.body.velocity.y);
     }
+    
+    this.position.x-=this.body.velocity.x;
+     this.position.y-=this.body.velocity.y;*/
 }
 
 definatelyNotPong.BallPrefab.setVelocity = function(x,y){

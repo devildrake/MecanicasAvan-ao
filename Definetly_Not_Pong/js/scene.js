@@ -36,8 +36,8 @@ definatelyNotPong.scene = {
     this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         
     this.ball = new definatelyNotPong.BallPrefab(this.game,100,100);
-    this.ball.enableBody=true;
-        //this.ball.x=
+    this.game.add.existing(this.ball);
+        
         
     },
     

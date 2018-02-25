@@ -3,16 +3,15 @@ var definatelyNotPong = definatelyNotPong || {};
 definatelyNotPong.BallPrefab = function(game,x,y,level){
 
 	Phaser.Sprite.call(this,game,100,100,"Ball");    
-    this.scale.setTo(1);
+    this.scale.setTo(.5);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
     
-    /*this.body.velocity.x=0;
-    this.body.velocity.y=0;
-    this.body.position.x=200;
-    this.body.position.y=500;*/
+    this.body.velocity.x=0;
+    this.body.velocity.y=1;
+    
    
    
 }
@@ -28,24 +27,25 @@ definatelyNotPong.BallPrefab.prototype.update = function(){
                         
                     
         } );
+    */
     
-    if(this.position.y<=0){
+    if(this.position.y<=0+this.height/2){
         
-        definatelyNotPong.BallPrefab.setVelocity(this.body.velocity.x,-this.body.velocity.y);
+        definatelyNotPong.BallPrefab.setVelocity(this,this.body.velocity.x,-this.body.velocity.y);
     }
-    
-    if(this.position.y>=definatelyNotPong.game.gameWidth){
+    //aqui hay que poner el game height, no 540, pero por algun motivo me petaba
+    else if(this.position.y>=540-this.height/2){
         
-        definatelyNotPong.BallPrefab.setVelocity(this.body.velocity.x,-this.body.velocity.y);
+        definatelyNotPong.BallPrefab.setVelocity(this,this.body.velocity.x,-this.body.velocity.y);
     }
     
     this.position.x-=this.body.velocity.x;
-     this.position.y-=this.body.velocity.y;*/
+     this.position.y-=this.body.velocity.y;
 }
 
-definatelyNotPong.BallPrefab.setVelocity = function(x,y){
+definatelyNotPong.BallPrefab.setVelocity = function(Object,x,y){
     
-    this.velocityX=x;
-    this.velocityY=y;
+    Object.body.velocity.x=x;
+    Object.body.velocity.y=y;
     
 }

@@ -2,7 +2,7 @@ var definatelyNotPong = definatelyNotPong || {};
 
 definatelyNotPong.BallPrefab = function(game,x,y,level){
 
-	Phaser.Sprite.call(this,game,100,100,"Ball");    
+	Phaser.Sprite.call(this,game,x,y,"Ball");    
     this.scale.setTo(.5);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);

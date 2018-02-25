@@ -5,10 +5,11 @@ definatelyNotPong.scene = {
         this.game.stage.backgroundColor = "#ffffff";
         this.load.image("RedLaser","img/RedLaser.png");
         this.load.image("GreenLaser","img/GreenLaser.png");
-         this.load.image("Barrier","img/Barrier.png");
-         this.load.image("Nave","img/player.png");
-         this.load.image("Nave2","img/player2.png");
-         this.load.image("Ball","img/Ball.png");
+        this.load.image("Barrier","img/Barrier.png");
+        this.load.image("Barrier2","img/Barrier2.png");
+        this.load.image("Nave","img/player.png");
+        this.load.image("Nave2","img/player2.png");
+        this.load.image("Ball","img/Ball.png");
         this.loadProjectiles();
         
     },
@@ -37,14 +38,35 @@ definatelyNotPong.scene = {
     this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         
     //añadir la pelota al juego    
-    this.ball = new definatelyNotPong.BallPrefab(this.game,100,100);
+    this.ball = new definatelyNotPong.BallPrefab(this.game,300,100);
     this.game.add.existing(this.ball);
-        
+    
+    //añadir jugadores
     this.player1 = new definatelyNotPong.CharPrefab(this.game,20,100);
     this.game.add.existing(this.player1);    
       
     this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
-    this.game.add.existing(this.player2);      
+    this.game.add.existing(this.player2); 
+        
+    //añadir barreras player 1   
+    this.barrier1 = new definatelyNotPong.BarrierPrefab(this.game,100,100);
+    this.game.add.existing(this.barrier1);
+    
+    this.barrier2 = new definatelyNotPong.BarrierPrefab(this.game,100,250);
+    this.game.add.existing(this.barrier2);    
+        
+    this.barrier3 = new definatelyNotPong.BarrierPrefab(this.game,100,425);
+    this.game.add.existing(this.barrier3);      
+        
+    //añadir barreras player 2  
+    this.barrier4 = new definatelyNotPong.BarrierPrefab(this.game,700,100);
+    this.game.add.existing(this.barrier4);
+    
+    this.barrier5 = new definatelyNotPong.BarrierPrefab(this.game,700,250);
+    this.game.add.existing(this.barrier5);    
+        
+    this.barrier6 = new definatelyNotPong.BarrierPrefab(this.game,700,425);
+    this.game.add.existing(this.barrier6); 
     },
     
     update:function(){

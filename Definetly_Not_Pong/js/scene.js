@@ -16,7 +16,6 @@ definatelyNotPong.scene = {
     
     inputs:function(){
         if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1)){
-            //INSERTAR POSICIÓN PERSONAJES
             this.createGreenProjectile(this.player1.body.position.x+40,this.player1.position.y);
         }
         
@@ -165,7 +164,7 @@ definatelyNotPong.scene = {
     update:function(){
         this.inputs();
         
-        this.game.physics.arcade.overlap(this.greenBarriers, this.redProjectiles, function(l,o){
+        this.game.physics.arcade.overlap(this.redProjectiles, this.greenBarriers, function(l,o){
 			o.kill();
             l.Health--;
 		});
@@ -240,6 +239,7 @@ definatelyNotPong.scene = {
         }else{
             projectile.Alive = true;
             projectile.reset(posX+8,posY+8);
+            console.log("Reset");
             projectile.body.velocity.x=-150;
         }
     },
@@ -251,6 +251,7 @@ definatelyNotPong.scene = {
             this.greenProjectiles.add(projectile);
         }else{
             projectile.Alive = true;
+                        console.log("Reset");
             projectile.reset(posX+8,posY+8);
             projectile.body.velocity.x=150;
         }

@@ -20,6 +20,8 @@ else{
     this.Alive = true;
     this.scale.setTo(1);
     this.anchor.setTo(.5);
+    this.checkWorldBounds = true;
+    this.outOfBoundsKill = true;
 }
 
 definatelyNotPong.ProjectilePrefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -27,5 +29,5 @@ definatelyNotPong.ProjectilePrefab.prototype = Object.create(Phaser.Sprite.proto
 definatelyNotPong.ProjectilePrefab.prototype.constructor = definatelyNotPong.ProjectilePrefab;
 
 definatelyNotPong.ProjectilePrefab.prototype.update = function(){
-    
+
 }

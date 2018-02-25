@@ -19,7 +19,6 @@ definatelyNotPong.BarrierPrefab = function(game,x,y,level){
     this.Health=5;
 }
 
-
 definatelyNotPong.BarrierPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 
 definatelyNotPong.BarrierPrefab.prototype.constructor = definatelyNotPong.BarrierPrefab;

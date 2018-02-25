@@ -10,11 +10,15 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
         Phaser.Sprite.call(this,game,x,y,"Nave2");
         
     }
+    this.dashing=false;
     this.scale.setTo(.3);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
+    this.velocity=100;
+    this.dashCoolDown=true;
+    this.powerUp;
 }
 
 
@@ -28,4 +32,13 @@ definatelyNotPong.CharPrefab.prototype.update = function(){
                         
                     
         } );*/
+}
+
+
+definatelyNotPong.CharPrefab.SetNotDashing = function(aPlayer){
+    aPlayer.dashing=false;
+}
+
+definatelyNotPong.CharPrefab.ResetCoolDownDash = function(aPlayer){
+    aPlayer.dashCoolDown=true;
 }

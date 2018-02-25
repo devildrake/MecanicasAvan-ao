@@ -2,8 +2,15 @@ var definatelyNotPong = definatelyNotPong || {};
 
 definatelyNotPong.CharPrefab = function(game,x,y,level){
 
-	Phaser.Sprite.call(this,game,x,y,"Nave");    
-    this.scale.setTo(1);
+	if(x<100){
+	Phaser.Sprite.call(this,game,x,y,"Nave");
+    
+    }
+    else{
+        Phaser.Sprite.call(this,game,x,y,"Nave2");
+        
+    }
+    this.scale.setTo(.3);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;

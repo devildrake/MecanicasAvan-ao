@@ -7,6 +7,7 @@ definatelyNotPong.scene = {
         this.load.image("GreenLaser","img/GreenLaser.png");
          this.load.image("Barrier","img/Barrier.png");
          this.load.image("Nave","img/player.png");
+         this.load.image("Nave2","img/player2.png");
          this.load.image("Ball","img/Ball.png");
         this.loadProjectiles();
         
@@ -35,15 +36,20 @@ definatelyNotPong.scene = {
     this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
     this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         
+    //añadir la pelota al juego    
     this.ball = new definatelyNotPong.BallPrefab(this.game,100,100);
     this.game.add.existing(this.ball);
         
-        
+    this.player1 = new definatelyNotPong.CharPrefab(this.game,20,100);
+    this.game.add.existing(this.player1);    
+      
+    this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
+    this.game.add.existing(this.player2);      
     },
     
     update:function(){
         this.inputs();
-        //this.ball.update();
+        
     },
     
     

@@ -21,14 +21,7 @@ definatelyNotPong.BallPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 
 definatelyNotPong.BallPrefab.prototype.constructor = definatelyNotPong.BallPrefab;
 
-definatelyNotPong.BallPrefab.prototype.update = function(){
-        /*this.game.physics.arcade.overlap(this,,
-        function(){
-                        
-                    
-        } );
-    */
-    
+definatelyNotPong.BallPrefab.prototype.update = function(){    
     if(this.position.y<=0+this.height/2){
         
         definatelyNotPong.BallPrefab.setVelocity(this,this.body.velocity.x,-this.body.velocity.y);

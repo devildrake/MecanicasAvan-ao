@@ -2,7 +2,7 @@ var definatelyNotPong = definatelyNotPong || {};
 
 definatelyNotPong.scene = {
     preload:function(){
-        this.game.stage.backgroundColor = "#ffffff";
+        this.game.stage.backgroundColor = "#7fb0ff";
         this.load.image("RedLaser","img/RedLaser.png");
         this.load.image("GreenLaser","img/GreenLaser.png");
         this.load.image("Barrier","img/Barrier.png");
@@ -121,40 +121,36 @@ definatelyNotPong.scene = {
         
     },
     
-    create:function(){
-        //this.oktorok = new definatelyNotPong.ProjectilePrefab(this.game,80,20);
-        //this.game.add.existing(this.oktorok);
+    create:function(){        
+        this.cursors = this.game.input.keyboard.createCursorKeys();
+        this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);        
+        this.redShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+        this.greenShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
+        this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
+        this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.moveUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
+        this.moveDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
+        this.greenDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
+        this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
-        
-    this.cursors = this.game.input.keyboard.createCursorKeys();
-	this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);        
-    this.redShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-    this.greenShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-    this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-    this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-    this.moveUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
-    this.moveDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-    this.greenDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
-    this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-        
-    //añadir la pelota al juego    
-    this.ball = new definatelyNotPong.BallPrefab(this.game,300,100);
-    this.game.add.existing(this.ball);
-    
-    //añadir jugadores
-    this.player1 = new definatelyNotPong.CharPrefab(this.game,20,100);
-    this.game.add.existing(this.player1);    
-      
-    this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
-    this.game.add.existing(this.player2); 
-        
-    this.createGreenBarrier(100,100);    
-    this.createGreenBarrier(100,250);    
-    this.createGreenBarrier(100,425);    
-        
-    this.createRedBarrier(700,100);    
-    this.createRedBarrier(700,250);    
-    this.createRedBarrier(700,425);    
+        //añadir la pelota al juego    
+        this.ball = new definatelyNotPong.BallPrefab(this.game,300,100);
+        this.game.add.existing(this.ball);
+
+        //añadir jugadores
+        this.player1 = new definatelyNotPong.CharPrefab(this.game,20,100);
+        this.game.add.existing(this.player1);    
+
+        this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
+        this.game.add.existing(this.player2); 
+
+        this.createGreenBarrier(100,100);    
+        this.createGreenBarrier(100,250);    
+        this.createGreenBarrier(100,425);    
+
+        this.createRedBarrier(700,100);    
+        this.createRedBarrier(700,250);    
+        this.createRedBarrier(700,425);    
         
         /*    //añadir barreras player 1   
     this.barrier1 = new definatelyNotPong.BarrierPrefab(this.game,100,100);
@@ -193,8 +189,14 @@ definatelyNotPong.scene = {
             l.Health--;
 		});
         
-        this.game.physics.arcade.overlap(this.greenProjectiles, this.ball, function(l,o){
-			o.kill();
+        //Collide projectiles with the ball
+        this.game.physics.arcade.overlap(this.ball, this.greenProjectiles, function(ball, projectile ){
+            var collisionVec = new Phaser.Point(ball.body.x - projectile.body.x, ball.body.y - projectile.body.y);
+            console.log(collisionVec);
+            collisionVec.normalize();
+            ball.body.velocity.x -= collisionVec.x;
+            ball.body.velocity.y -= collisionVec.y;
+			projectile.kill();
 		});
         
         this.game.physics.arcade.overlap(this.redProjectiles, this.ball, function(l,o){
@@ -232,6 +234,8 @@ definatelyNotPong.scene = {
 			o.kill();
             l.slow=true;
 		});
+        
+        //collide red
     },
     
     createRedBarrier:function(posX,posY){

@@ -3,7 +3,7 @@ var definatelyNotPong = definatelyNotPong || {};
 definatelyNotPong.CharPrefab = function(game,x,y,level){
 
 	if(x<100){
-	Phaser.Sprite.call(this,game,x,y,"Nave");
+	   Phaser.Sprite.call(this,game,x,y,"Nave");
     
     }
     else{
@@ -16,7 +16,7 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
-    this.velocity=100;
+    this.velocity=200;
     this.dashCoolDown=true;
     this.powerUp;
     this.stun=false;

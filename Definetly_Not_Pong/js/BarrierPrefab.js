@@ -3,7 +3,7 @@ var definatelyNotPong = definatelyNotPong || {};
 definatelyNotPong.BarrierPrefab = function(game,x,y,level){
 
 	if(x<300){
-	Phaser.Sprite.call(this,game,x,y,"Barrier");
+	   Phaser.Sprite.call(this,game,x,y,"Barrier");
     
     }
     else{
@@ -23,13 +23,7 @@ definatelyNotPong.BarrierPrefab.prototype = Object.create(Phaser.Sprite.prototyp
 
 definatelyNotPong.BarrierPrefab.prototype.constructor = definatelyNotPong.BarrierPrefab;
 
-definatelyNotPong.BarrierPrefab.prototype.update = function(){
-        /*this.game.physics.arcade.overlap(this,,
-        function(){
-                        
-                    
-        } );*/
-    
+definatelyNotPong.BarrierPrefab.prototype.update = function(){    
     if(this.Health>=0){
         this.Alive=false;
     }

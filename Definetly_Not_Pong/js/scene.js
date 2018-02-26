@@ -24,9 +24,18 @@ definatelyNotPong.scene = {
         }
         if(!this.player2.dashing){
             if(this.cursors.down.isDown&&this.player2.position.y<GameOptions.gameHeight-this.player2.height/2){
-                this.player2.body.velocity.y = (+this.player2.velocity);
+                if(this.player2.slow){
+                    this.player2.body.velocity.y = (+this.player2.velocity*0.5);
+                }else{
+                    this.player2.body.velocity.y = (+this.player2.velocity);
+                }
+                
             }else if(this.cursors.up.isDown&&this.player2.position.y>this.player2.height){
-                this.player2.body.velocity.y = (-this.player2.velocity);
+                 if(this.player2.slow){
+                    this.player2.body.velocity.y = (-this.player2.velocity*0.5);
+                }else{
+                    this.player2.body.velocity.y = (-this.player2.velocity);
+                }
             }else{
                 this.player2.body.velocity.y = 0;
             }
@@ -40,9 +49,19 @@ definatelyNotPong.scene = {
         
         if(!this.player1.dashing){
             if(this.moveDownKey.isDown&&this.player1.position.y<GameOptions.gameHeight-this.player1.height/2){
-                this.player1.body.velocity.y = (+this.player1.velocity);
+                if(this.player1.slow){
+                    this.player1.body.velocity.y = (+this.player1.velocity*0.5);
+                }else{
+                    this.player1.body.velocity.y = (+this.player1.velocity);
+                }
+                
             }else if(this.moveUpKey.isDown&&this.player1.position.y>this.player1.height){
-                this.player1.body.velocity.y = (-this.player1.velocity);
+                if(this.player1.slow){
+                    this.player1.body.velocity.y = (-this.player1.velocity*0.5);
+                }else{
+                    this.player1.body.velocity.y = (-this.player1.velocity);
+                }
+                
             }else{
                 this.player1.body.velocity.y = 0;
             }
@@ -181,9 +200,38 @@ definatelyNotPong.scene = {
         this.game.physics.arcade.overlap(this.redProjectiles, this.ball, function(l,o){
 			o.kill();
 		});
+        //collide barreras-------------
+        this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
+			o.kill();
+            l.body.velocity.x*=-1;
+            
+		});
+        this.game.physics.arcade.overlap(this.ball, this.redBarriers, function(l,o){
+			o.kill();
+            l.body.velocity.x*=-1;
+            
+		});
+        //collide players with ball
+        this.game.physics.arcade.overlap(this.ball, this.player1, function(l,o){
+			o.stun=true;
+            l.body.velocity.x*=-1;
+            
+		});
+        this.game.physics.arcade.overlap(this.ball, this.player2, function(l,o){
+			o.stun=true;
+            l.body.velocity.x*=-1;
+            
+		});
         
-        
-        
+        //collide players with bullet
+        this.game.physics.arcade.overlap(this.redProjectiles, this.player1, function(l,o){
+			o.kill();
+            l.slow=true;
+		});
+        this.game.physics.arcade.overlap(this.greenProjectiles, this.player2, function(l,o){
+			o.kill();
+            l.slow=true;
+		});
     },
     
     createRedBarrier:function(posX,posY){

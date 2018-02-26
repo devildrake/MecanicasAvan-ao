@@ -9,7 +9,7 @@ definatelyNotPong.BallPrefab = function(game,x,y,level){
     this.level = level;
     this.Alive = true;
     
-    this.body.velocity.x=0;
+    this.body.velocity.x=2;
     this.body.velocity.y=1;
     
    

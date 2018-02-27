@@ -3,7 +3,7 @@ var definatelyNotPong = definatelyNotPong || {};
 var GameOptions = {
     gameWidth:800,
     gameHeight:540,
-    ballBaseVelocity:new Phaser.Point(-2,1),
+    ballBaseVelocity:new Phaser.Point(-40,20),
     score:new Phaser.Point(0,0)
 };
 

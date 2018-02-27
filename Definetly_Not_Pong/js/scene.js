@@ -10,6 +10,7 @@ definatelyNotPong.scene = {
         this.load.image("Nave","img/player.png");
         this.load.image("Nave2","img/player2.png");
         this.load.image("Ball","img/Ball.png");
+		this.game.load.bitmapFont("game_font","font/game_font.png","font/game_font.fnt");
         this.loadProjectiles();
         this.loadBarriers();
     },
@@ -134,7 +135,7 @@ definatelyNotPong.scene = {
         this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 
         //añadir la pelota al juego    
-        this.ball = new definatelyNotPong.BallPrefab(this.game,300,100);
+        this.ball = new definatelyNotPong.BallPrefab(this.game,300,100,this);
         this.game.add.existing(this.ball);
 
         //añadir jugadores
@@ -150,7 +151,12 @@ definatelyNotPong.scene = {
 
         this.createRedBarrier(700,100);    
         this.createRedBarrier(700,250);    
-        this.createRedBarrier(700,425);    
+        this.createRedBarrier(700,425);
+		
+		this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
+		this.scoreLeft.anchor.setTo(.5);
+		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
+		this.scoreRight.anchor.setTo(.5);
         
         /*    //añadir barreras player 1   
     this.barrier1 = new definatelyNotPong.BarrierPrefab(this.game,100,100);
@@ -188,20 +194,21 @@ definatelyNotPong.scene = {
 			o.kill();
             l.Health--;
 		});
-        
+        /*
         //Collide projectiles with the ball
         this.game.physics.arcade.overlap(this.ball, this.greenProjectiles, function(ball, projectile ){
-            var collisionVec = new Phaser.Point(ball.body.x - projectile.body.x, ball.body.y - projectile.body.y);
-            console.log(collisionVec);
-            collisionVec.normalize();
-            ball.body.velocity.x -= collisionVec.x;
-            ball.body.velocity.y -= collisionVec.y;
+            //var collisionVec = new Phaser.Point(ball.body.x - projectile.body.x, ball.body.y - projectile.body.y);
+            //console.log(collisionVec);
+            //collisionVec.normalize();
+            //ball.body.velocity.x -= collisionVec.x;
+            //ball.body.velocity.y -= collisionVec.y;
 			projectile.kill();
 		});
         
         this.game.physics.arcade.overlap(this.redProjectiles, this.ball, function(l,o){
 			o.kill();
 		});
+		*/
         //collide barreras-------------
         this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
 			o.kill();
@@ -286,7 +293,7 @@ definatelyNotPong.scene = {
     createRedProjectile:function(posX,posY){
         var projectile = this.redProjectiles.getFirstExists(false);
         if(!projectile){
-            projectile = new definatelyNotPong.ProjectilePrefab(this.game,posX,posY);
+            projectile = new definatelyNotPong.ProjectilePrefab(this.game,posX,posY, this);
             this.redProjectiles.add(projectile);
         }else{
             projectile.Alive = true;
@@ -299,18 +306,18 @@ definatelyNotPong.scene = {
     createGreenProjectile:function(posX,posY){
         var projectile = this.greenProjectiles.getFirstExists(false);
         if(!projectile){
-            projectile = new definatelyNotPong.ProjectilePrefab(this.game,posX,posY);
+            projectile = new definatelyNotPong.ProjectilePrefab(this.game,posX,posY, this);
             this.greenProjectiles.add(projectile);
         }else{
             projectile.Alive = true;
-                        console.log("Reset");
+            console.log("Reset");
             projectile.reset(posX+8,posY+8);
             projectile.body.velocity.x=150;
         }
-    }
+    },
     
-    
-    
-    
-    
+    UpdateScore:function(){
+		this.scoreLeft.text = ""+GameOptions.score.x;
+		this.scoreRight.text = ""+GameOptions.score.y;
+	}
 }

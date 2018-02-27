@@ -22,13 +22,17 @@ definatelyNotPong.BallPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 definatelyNotPong.BallPrefab.prototype.constructor = definatelyNotPong.BallPrefab;
 
 definatelyNotPong.BallPrefab.prototype.update = function(){
-    //RESET DE LA POSICION CUANDO SE MARCA UN PUNTO
+    //RESET DE LA POSICION CUANDO SE MARCA UN PUNTO E INCREMENTO DEL MARCADOR
     if(this.position.x < -25){
         this.position.x = GameOptions.gameWidth/2 + GameOptions.gameWidth/6;
         definatelyNotPong.BallPrefab.setVelocity(this, GameOptions.ballBaseVelocity.x, GameOptions.ballBaseVelocity.y);
+		GameOptions.score.y++;
+		this.level.UpdateScore();
     }else if(this.position.x > GameOptions.gameWidth + 25){
         this.position.x = GameOptions.gameWidth/2 - GameOptions.gameWidth/6;
         definatelyNotPong.BallPrefab.setVelocity(this, -GameOptions.ballBaseVelocity.x, GameOptions.ballBaseVelocity.y);
+		GameOptions.score.x++;
+		this.level.UpdateScore();
     }
     
     if(this.position.y<=0+this.height/2){
@@ -39,12 +43,11 @@ definatelyNotPong.BallPrefab.prototype.update = function(){
         definatelyNotPong.BallPrefab.setVelocity(this,this.body.velocity.x,-this.body.velocity.y);
     }
     
-    this.position.x-=this.body.velocity.x;
-    this.position.y-=this.body.velocity.y;
+    //this.position.x-=this.body.velocity.x;
+    //this.position.y-=this.body.velocity.y;
 }
 
 definatelyNotPong.BallPrefab.setVelocity = function(Object,x,y){
-    
     Object.body.velocity.x=x;
     Object.body.velocity.y=y;
     

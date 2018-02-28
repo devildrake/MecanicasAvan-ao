@@ -31,7 +31,7 @@ definatelyNotPong.scene = {
                     this.player2.body.velocity.y = (+this.player2.velocity);
                 }
                 
-            }else if(this.cursors.up.isDown&&this.player2.position.y>this.player2.height){
+            }else if(this.cursors.up.isDown&&this.player2.position.y>this.player2.height/2){
                  if(this.player2.slow){
                     this.player2.body.velocity.y = (-this.player2.velocity*0.5);
                 }else{
@@ -56,7 +56,7 @@ definatelyNotPong.scene = {
                     this.player1.body.velocity.y = (+this.player1.velocity);
                 }
                 
-            }else if(this.moveUpKey.isDown&&this.player1.position.y>this.player1.height){
+            }else if(this.moveUpKey.isDown&&this.player1.position.y>this.player1.height/2){
                 if(this.player1.slow){
                     this.player1.body.velocity.y = (-this.player1.velocity*0.5);
                 }else{

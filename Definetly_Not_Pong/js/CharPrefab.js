@@ -11,7 +11,7 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
         
     }
     this.dashing=false;
-    this.scale.setTo(.3);
+    //this.scale.setTo(.3);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;
@@ -31,13 +31,7 @@ definatelyNotPong.CharPrefab.prototype = Object.create(Phaser.Sprite.prototype);
 definatelyNotPong.CharPrefab.prototype.constructor = definatelyNotPong.CharPrefab;
 
 definatelyNotPong.CharPrefab.prototype.update = function(){
-        /*this.game.physics.arcade.overlap(this,,
-        function(){
-                        
-                    
-        } );*/
     if(this.stun){
-        
         this.countdown1+=1;
         this.body.immovable =true;
         this.body.moves=false;
@@ -52,16 +46,11 @@ definatelyNotPong.CharPrefab.prototype.update = function(){
         }
     }    
       
-    
-     if(this.slow){
-        
+     if(this.slow){  
         this.countdown2+=1;
-        
-                
         //es una forma cutre pero es la mas efectiva que he encontrado
         //cambiar el numero para aumentar o disminuir el tiempo de slow
         if(this.countdown2>=70){
-            
             this.countdown2=0;
             this.slow=false;  
         }

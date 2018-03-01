@@ -2,7 +2,7 @@ var definatelyNotPong = definatelyNotPong || {};
 
 
 definatelyNotPong.ProjectilePrefab = function(game,x,y,level){
-	var speed = 150;
+	var speed = 250;
 
 	if(x<100){
 		Phaser.Sprite.call(this,game,x,y,"GreenLaser");
@@ -30,11 +30,13 @@ definatelyNotPong.ProjectilePrefab.prototype = Object.create(Phaser.Sprite.proto
 definatelyNotPong.ProjectilePrefab.prototype.constructor = definatelyNotPong.ProjectilePrefab;
 
 definatelyNotPong.ProjectilePrefab.prototype.update = function(){
+	//COLISION ENTRE LOS PROYECTILES Y LA PELOTA.
+	//AQUI SE CALCULA COMO REBOTA LA PELOTA
 	this.game.physics.arcade.collide(this, this.level.ball, function(projectile, ball){
 		var collisionVec = new Phaser.Point(ball.position.x - projectile.position.x, ball.position.y - projectile.position.y);
-		collisionVec.normalize() * 100;
-		ball.body.velocity.x = ball.body.velocity.x + collisionVec.x;
-		ball.body.velocity.y = ball.body.velocity.y + collisionVec.y;
+		collisionVec.normalize();
+		ball.body.velocity.x = ball.body.velocity.x + collisionVec.x * 100;
+		ball.body.velocity.y = ball.body.velocity.y + collisionVec.y * 500;
 		projectile.kill();
 	});
 }

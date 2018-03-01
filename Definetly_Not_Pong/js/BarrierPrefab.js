@@ -10,7 +10,7 @@ definatelyNotPong.BarrierPrefab = function(game,x,y,level){
         Phaser.Sprite.call(this,game,x,y,"Barrier2");
         
     }
-    this.scale.setTo(2);
+    //this.scale.setTo(2);
     this.anchor.setTo(.5);
 	this.game.physics.arcade.enable(this);
     this.level = level;

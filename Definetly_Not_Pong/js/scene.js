@@ -16,13 +16,16 @@ definatelyNotPong.scene = {
     },
     
     inputs:function(){
-        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1)){
-            this.createGreenProjectile(this.player1.body.position.x+40,this.player1.position.y);
+        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot){
+            this.createGreenProjectile(this.player1.body.position.x+5,this.player1.position.y);
+			this.greenShot = true;
         }
         
-        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1)){
+        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot){
             this.createRedProjectile(this.player2.body.position.x-5,this.player2.position.y);
+			this.redShot = true;
         }
+		
         if(!this.player2.dashing){
             if(this.cursors.down.isDown&&this.player2.position.y<GameOptions.gameHeight-this.player2.height/2){
                 if(this.player2.slow){
@@ -74,7 +77,7 @@ definatelyNotPong.scene = {
             }
         }
         
-        if(this.greenDashKey.isDown&&this.player2.dashCoolDown){
+        if((this.greenDashKey1.isDown || this.greenDashKey2.isDown) &&this.player2.dashCoolDown){
             if(this.player2.body.velocity.y>0){
                 this.player2.body.velocity.y*=3;
                 this.player2.dashCoolDown=false;
@@ -131,8 +134,15 @@ definatelyNotPong.scene = {
         this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
         this.moveUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
         this.moveDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
-        this.greenDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
+        this.greenDashKey1 = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
+		this.greenDashKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
         this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
+		
+		this.redShot = false;
+		this.greenShot = false;
+		this.shootCD = 0.2;
+		this.redCDTimer = 0;
+		this.greenCDTimer = 0;
 
         //añadir la pelota al juego    
         this.ball = new definatelyNotPong.BallPrefab(this.game,300,100,this);
@@ -145,41 +155,22 @@ definatelyNotPong.scene = {
         this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
         this.game.add.existing(this.player2); 
 
-        this.createGreenBarrier(100,100);    
-        this.createGreenBarrier(100,250);    
-        this.createGreenBarrier(100,425);    
+        this.createGreenBarrier(100,GameOptions.gameHeight/6 *1);    
+        this.createGreenBarrier(100,GameOptions.gameHeight/6 *2);    
+        this.createGreenBarrier(100,GameOptions.gameHeight/6 *3);    
+        this.createGreenBarrier(100,GameOptions.gameHeight/6 *4);
+		this.createGreenBarrier(100,GameOptions.gameHeight/6 *5);
 
-        this.createRedBarrier(700,100);    
-        this.createRedBarrier(700,250);    
-        this.createRedBarrier(700,425);
+        this.createRedBarrier(700,GameOptions.gameHeight/6 *1);    
+        this.createRedBarrier(700,GameOptions.gameHeight/6 *2);    
+        this.createRedBarrier(700,GameOptions.gameHeight/6 *3);
+        this.createRedBarrier(700,GameOptions.gameHeight/6 *4);
+		this.createRedBarrier(700,GameOptions.gameHeight/6 *5);
 		
 		this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
 		this.scoreLeft.anchor.setTo(.5);
 		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
 		this.scoreRight.anchor.setTo(.5);
-        
-        /*    //añadir barreras player 1   
-    this.barrier1 = new definatelyNotPong.BarrierPrefab(this.game,100,100);
-    this.game.add.existing(this.barrier1);
-    
-    this.barrier2 = new definatelyNotPong.BarrierPrefab(this.game,100,250);
-    this.game.add.existing(this.barrier2);    
-        
-    this.barrier3 = new definatelyNotPong.BarrierPrefab(this.game,100,425);
-    this.game.add.existing(this.barrier3);      
-        
-    //añadir barreras player 2  
-    this.barrier4 = new definatelyNotPong.BarrierPrefab(this.game,700,100);
-    this.game.add.existing(this.barrier4);
-    
-    this.barrier5 = new definatelyNotPong.BarrierPrefab(this.game,700,250);
-    this.game.add.existing(this.barrier5);    
-        
-    this.barrier6 = new definatelyNotPong.BarrierPrefab(this.game,700,425);
-    this.game.add.existing(this.barrier6); */
-        
-
-
     },
     
     update:function(){
@@ -194,32 +185,18 @@ definatelyNotPong.scene = {
 			o.kill();
             l.Health--;
 		});
-        /*
-        //Collide projectiles with the ball
-        this.game.physics.arcade.overlap(this.ball, this.greenProjectiles, function(ball, projectile ){
-            //var collisionVec = new Phaser.Point(ball.body.x - projectile.body.x, ball.body.y - projectile.body.y);
-            //console.log(collisionVec);
-            //collisionVec.normalize();
-            //ball.body.velocity.x -= collisionVec.x;
-            //ball.body.velocity.y -= collisionVec.y;
-			projectile.kill();
-		});
         
-        this.game.physics.arcade.overlap(this.redProjectiles, this.ball, function(l,o){
+        //collide barreras con la pelota
+        this.game.physics.arcade.collide(this.ball, this.greenBarriers, function(l,o){
 			o.kill();
+            l.body.velocity.x = Math.abs(l.body.velocity.x);
 		});
-		*/
-        //collide barreras-------------
-        this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
+        this.game.physics.arcade.collide(this.ball, this.redBarriers, function(l,o){
 			o.kill();
-            l.body.velocity.x*=-1;
+            l.body.velocity.x = Math.abs(l.body.velocity.x) * -1;
             
 		});
-        this.game.physics.arcade.overlap(this.ball, this.redBarriers, function(l,o){
-			o.kill();
-            l.body.velocity.x*=-1;
-            
-		});
+		
         //collide players with ball
         this.game.physics.arcade.overlap(this.ball, this.player1, function(l,o){
 			o.stun=true;
@@ -242,7 +219,26 @@ definatelyNotPong.scene = {
             l.slow=true;
 		});
         
-        //collide red
+		//CONTROL DE LOS DISPAROS PARA QUE LOS HAGAN LIMITADAMENTE CON COOLDOWN
+		//CONTROL DE LOS DISPAROS PARA QUE LOS HAGAN LIMITADAMENTE CON COOLDOWN
+		//CONTROL DE LOS DISPAROS PARA QUE LOS HAGAN LIMITADAMENTE CON COOLDOWN
+		if(this.greenShot){
+			if(this.greenCDTimer <= this.shootCD){
+				this.greenCDTimer += this.game.time.physicsElapsed;
+			}else{
+				this.greenShot = false;
+				this.greenCDTimer = 0;
+			}
+		}
+		if(this.redShot){
+			if(this.redCDTimer <= this.shootCD){
+				this.redCDTimer += this.game.time.physicsElapsed;
+			}else{
+				this.redShot = false;
+				this.redCDTimer = 0;
+			}
+		}
+		
     },
     
     createRedBarrier:function(posX,posY){

@@ -2,7 +2,7 @@ var definatelyNotPong = definatelyNotPong || {};
 
 definatelyNotPong.scene = {
     preload:function(){
-        this.game.stage.backgroundColor = "#7fb0ff";
+        this.game.stage.backgroundColor = "#9d9d9d";
         this.load.image("RedLaser","img/RedLaser.png");
         this.load.image("GreenLaser","img/GreenLaser.png");
         this.load.image("Barrier","img/Barrier.png");
@@ -77,40 +77,42 @@ definatelyNotPong.scene = {
             }
         }
         
+        //GREEN DASH
         if((this.greenDashKey1.isDown || this.greenDashKey2.isDown) &&this.player2.dashCoolDown){
             if(this.player2.body.velocity.y>0){
-                this.player2.body.velocity.y*=3;
+                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
-                    this.game.time.events.add(Phaser.Timer.SECOND * 0.5,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
-                    this.game.time.events.add(Phaser.Timer.SECOND * 1.5,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
 
             }else if(this.player2.body.velocity.y<0){
-                    this.player2.dashCoolDown=false;
-                    this.player2.dashing=true;
-                    this.player2.body.velocity.y*=3;
-                    this.game.time.events.add(Phaser.Timer.SECOND * 0.5,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
-                    this.game.time.events.add(Phaser.Timer.SECOND * 1.5,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
+                this.player2.dashCoolDown=false;
+                this.player2.dashing=true;
+                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
 
 
             }
 
         }
         
+        //RED DASH
         if(this.redDashKey.isDown&&this.player1.dashCoolDown){
             if(this.player1.body.velocity.y>0){
                 this.player1.dashCoolDown=false;
-                this.player1.body.velocity.y*=3;
+                this.player1.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player1.dashing=true;
-                    this.game.time.events.add(Phaser.Timer.SECOND * 0.5,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
-                    this.game.time.events.add(Phaser.Timer.SECOND * 1.5,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
 
             }else if(this.player1.body.velocity.y<0){
-                this.player1.body.velocity.y*=3;
+                this.player1.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player1.dashing=true;
                 this.player1.dashCoolDown=false;
-                    this.game.time.events.add(Phaser.Timer.SECOND * 0.5,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
-                    this.game.time.events.add(Phaser.Timer.SECOND * 1.5,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
             }
         }
         
@@ -143,6 +145,10 @@ definatelyNotPong.scene = {
 		this.shootCD = 0.2;
 		this.redCDTimer = 0;
 		this.greenCDTimer = 0;
+        
+        this.dashTime = 0.1; //tiempo que dura el dash en segundos
+        this.dashCD = 1; //cooldown del dash en segundos
+        this.dashSpeedMultiplier = 5; //multiplicador de velocidad para el dash
 
         //añadir la pelota al juego    
         this.ball = new definatelyNotPong.BallPrefab(this.game,300,100,this);
@@ -198,14 +204,14 @@ definatelyNotPong.scene = {
 		});
 		
         //collide players with ball
-        this.game.physics.arcade.overlap(this.ball, this.player1, function(l,o){
-			o.stun=true;
-            l.body.velocity.x*=-1;
+        this.game.physics.arcade.overlap(this.ball, this.player1, function(ball,player){
+			player.stun=true;
+            ball.body.velocity.x = Math.abs(ball.body.velocity.x);
             
 		});
-        this.game.physics.arcade.overlap(this.ball, this.player2, function(l,o){
-			o.stun=true;
-            l.body.velocity.x*=-1;
+        this.game.physics.arcade.overlap(this.ball, this.player2, function(ball,player){
+			player.stun=true;
+            ball.body.velocity.x =  Math.abs(ball.body.velocity.x) * -1;
             
 		});
         
@@ -293,9 +299,9 @@ definatelyNotPong.scene = {
             this.redProjectiles.add(projectile);
         }else{
             projectile.Alive = true;
-            projectile.reset(posX+8,posY+8);
+            projectile.reset(posX,posY);
             console.log("Reset");
-            projectile.body.velocity.x=-150;
+            projectile.body.velocity.x=-definatelyNotPong.ProjectilePrefab.speed;
         }
     },
         
@@ -307,8 +313,8 @@ definatelyNotPong.scene = {
         }else{
             projectile.Alive = true;
             console.log("Reset");
-            projectile.reset(posX+8,posY+8);
-            projectile.body.velocity.x=150;
+            projectile.reset(posX,posY);
+            projectile.body.velocity.x=definatelyNotPong.ProjectilePrefab.speed;
         }
     },
     

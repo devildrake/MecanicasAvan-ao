@@ -10,6 +10,8 @@ definatelyNotPong.scene = {
         this.load.image("Nave","img/player.png");
         this.load.image("Nave2","img/player2.png");
         this.load.image("Ball","img/Ball.png");
+        this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
+        this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
 		this.game.load.bitmapFont("game_font","font/game_font.png","font/game_font.fnt");
         this.loadProjectiles();
         this.loadBarriers();
@@ -177,17 +179,59 @@ definatelyNotPong.scene = {
 		this.scoreLeft.anchor.setTo(.5);
 		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
 		this.scoreRight.anchor.setTo(.5);
+        
+        //======================================UI================================
+        //======================================UI================================
+        //======================================UI================================
+        //======================================UI================================
+        this.greenStunUI = this.game.add.sprite(80,GameOptions.gameHeight-30,"Stun_Feedback",1);
+        this.greenStunUI.anchor.setTo(.5);
+        this.greenStunUI.scale.setTo(0.8);
+        this.greenStunUI.alpha = 0.5;
+        this.greenSlowUI = this.game.add.sprite(140,GameOptions.gameHeight-30, "Slow_Feedback",1);
+        this.greenSlowUI.anchor.setTo(.5);
+        this.greenSlowUI.scale.setTo(0.8);
+        this.greenSlowUI.alpha = 0.5;
+        
+        this.redStunUI = this.game.add.sprite(GameOptions.gameWidth-80, GameOptions.gameHeight-30, "Stun_Feedback",1);
+        this.redStunUI.anchor.setTo(.5);
+        this.redStunUI.scale.setTo(0.8);
+        this.redStunUI.alpha = 0.5;
+        this.redSlowUI = this.game.add.sprite(GameOptions.gameWidth-140, GameOptions.gameHeight-30, "Slow_Feedback",1);
+        this.redSlowUI.anchor.setTo(.5);
+        this.redSlowUI.scale.setTo(0.8);
+        this.redSlowUI.alpha = 0.5;
+        
+        
     },
     
     update:function(){
         this.inputs();
         
-        this.game.physics.arcade.overlap(this.redProjectiles, this.greenBarriers, function(l,o){
+        if(this.player1.stun){
+            this.greenStunUI.frame = 0;
+            this.greenStunUI.alpha = 1;
+        }
+        else{
+            this.greenStunUI.frame = 1;
+            this.greenStunUI.alpha = 0.5;
+        }
+        if(this.player2.stun){
+            this.redStunUI.frame = 0;
+            this.redStunUI.alpha = 1;
+        }
+        else{
+            this.redStunUI.frame = 1;
+            this.redStunUI.alpha = 0.5;
+        }
+        
+        this.game.physics.arcade.overlap(this.redProjectiles, this.greenBarriers, function(o,l){
 			o.kill();
             l.Health--;
+            console.log(l);
 		});
         
-        this.game.physics.arcade.overlap(this.greenProjectiles, this.redBarriers, function(l,o){
+        this.game.physics.arcade.overlap(this.greenProjectiles, this.redBarriers, function(o,l){
 			o.kill();
             l.Health--;
 		});

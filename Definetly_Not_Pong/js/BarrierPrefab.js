@@ -24,7 +24,8 @@ definatelyNotPong.BarrierPrefab.prototype = Object.create(Phaser.Sprite.prototyp
 definatelyNotPong.BarrierPrefab.prototype.constructor = definatelyNotPong.BarrierPrefab;
 
 definatelyNotPong.BarrierPrefab.prototype.update = function(){    
-    if(this.Health>=0){
+    if(this.Health<=0){
         this.Alive=false;
+        this.kill();
     }
 }

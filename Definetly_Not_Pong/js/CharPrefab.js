@@ -23,6 +23,9 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
     this.countdown1=0;
     this.countdown2=0;
     this.slow=false;
+    this.sayHi = function(){
+        console.log("Hi");
+    }
 }
 
 

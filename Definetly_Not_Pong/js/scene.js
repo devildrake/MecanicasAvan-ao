@@ -163,27 +163,22 @@ definatelyNotPong.scene = {
         this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
         this.game.add.existing(this.player2); 
 
-        this.createGreenBarrier(100,GameOptions.gameHeight/6 *1);    
-        this.createGreenBarrier(100,GameOptions.gameHeight/6 *2);    
-        this.createGreenBarrier(100,GameOptions.gameHeight/6 *3);    
-        this.createGreenBarrier(100,GameOptions.gameHeight/6 *4);
-		this.createGreenBarrier(100,GameOptions.gameHeight/6 *5);
-
-        this.createRedBarrier(700,GameOptions.gameHeight/6 *1);    
-        this.createRedBarrier(700,GameOptions.gameHeight/6 *2);    
-        this.createRedBarrier(700,GameOptions.gameHeight/6 *3);
-        this.createRedBarrier(700,GameOptions.gameHeight/6 *4);
-		this.createRedBarrier(700,GameOptions.gameHeight/6 *5);
-		
-		this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
-		this.scoreLeft.anchor.setTo(.5);
-		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
-		this.scoreRight.anchor.setTo(.5);
+        this.numberOfBarriers = 5;
+        for(var i = 0; i<this.numberOfBarriers; i++){
+            this.createGreenBarrier(100,GameOptions.gameHeight/(this.numberOfBarriers+1) * (i+1));
+            this.createRedBarrier(700,GameOptions.gameHeight/(this.numberOfBarriers+1) *(i+1));
+        }
         
         //======================================UI================================
         //======================================UI================================
         //======================================UI================================
         //======================================UI================================
+        
+        this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
+		this.scoreLeft.anchor.setTo(.5);
+		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
+		this.scoreRight.anchor.setTo(.5);
+        
         this.greenStunUI = this.game.add.sprite(80,GameOptions.gameHeight-30,"Stun_Feedback",1);
         this.greenStunUI.anchor.setTo(.5);
         this.greenStunUI.scale.setTo(0.8);
@@ -208,6 +203,11 @@ definatelyNotPong.scene = {
     update:function(){
         this.inputs();
         
+        //======================================UI================================
+        //======================================UI================================
+        //======================================UI================================
+        //======================================UI================================
+        //stun
         if(this.player1.stun){
             this.greenStunUI.frame = 0;
             this.greenStunUI.alpha = 1;
@@ -224,6 +224,24 @@ definatelyNotPong.scene = {
             this.redStunUI.frame = 1;
             this.redStunUI.alpha = 0.5;
         }
+        //slow
+        if(this.player1.slow){
+            this.greenSlowUI.frame = 0;
+            this.greenSlowUI.alpha = 1;
+        }
+        else{
+            this.greenSlowUI.frame = 1;
+            this.greenSlowUI.alpha = 0.5;
+        }
+        if(this.player2.slow){
+            this.redSlowUI.frame = 0;
+            this.redSlowUI.alpha = 1;
+        }
+        else{
+            this.redSlowUI.frame = 1;
+            this.redSlowUI.alpha = 0.5;
+        }
+        
         
         this.game.physics.arcade.overlap(this.redProjectiles, this.greenBarriers, function(o,l){
 			o.kill();
@@ -237,12 +255,12 @@ definatelyNotPong.scene = {
 		});
         
         //collide barreras con la pelota
-        this.game.physics.arcade.collide(this.ball, this.greenBarriers, function(l,o){
-			o.kill();
+        this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
+			//o.kill();
             l.body.velocity.x = Math.abs(l.body.velocity.x);
 		});
-        this.game.physics.arcade.collide(this.ball, this.redBarriers, function(l,o){
-			o.kill();
+        this.game.physics.arcade.overlap(this.ball, this.redBarriers, function(l,o){
+			//o.kill();
             l.body.velocity.x = Math.abs(l.body.velocity.x) * -1;
             
 		});
@@ -316,8 +334,6 @@ definatelyNotPong.scene = {
     
     
     loadProjectiles:function(){
-    
-        console.log("Bruh");
         this.redProjectiles = this.add.group();
         this.redProjectiles.enableBody = true;
 

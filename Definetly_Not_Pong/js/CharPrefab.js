@@ -16,16 +16,13 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
 	this.game.physics.arcade.enable(this);
     this.level = level;
     this.Alive = true;
-    this.velocity=200;
+    this.velocity=250;
     this.dashCoolDown=true;
     this.powerUp;
     this.stun=false;
     this.countdown1=0;
     this.countdown2=0;
     this.slow=false;
-    this.sayHi = function(){
-        console.log("Hi");
-    }
 }
 
 
@@ -49,16 +46,22 @@ definatelyNotPong.CharPrefab.prototype.update = function(){
         }
     }    
       
-     if(this.slow){  
-        this.countdown2+=1;
-        //es una forma cutre pero es la mas efectiva que he encontrado
-        //cambiar el numero para aumentar o disminuir el tiempo de slow
-        if(this.countdown2>=70){
-            this.countdown2=0;
-            this.slow=false;  
-        }
-    }    
-    
+	if(this.slow){  
+		this.countdown2+=1;
+		//es una forma cutre pero es la mas efectiva que he encontrado
+		//cambiar el numero para aumentar o disminuir el tiempo de slow
+		if(this.countdown2>=70){
+			this.countdown2=0;
+			this.slow=false;  
+		}
+	}
+	
+    if(this.position.y < 0){
+		this.position.y = 0;
+	}
+	else if(this.position.y > GameOptions.gameHeight){
+		this.position.y = GameOptions.gameHeight;
+	}
 }
 
 

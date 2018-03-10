@@ -13,6 +13,10 @@ definatelyNotPong.scene = {
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
         this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
 		this.game.load.bitmapFont("game_font","font/game_font.png","font/game_font.fnt");
+		
+		this.load.audio("Laser1", "sfx/laser1.mp3");
+		this.load.audio("Laser2", "sfx/laser2.mp3");
+		this.load.audio("BallHit", "sfx/ball_hit.mp3");
         this.loadProjectiles();
         this.loadBarriers();
     },
@@ -21,11 +25,13 @@ definatelyNotPong.scene = {
         if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot){
             this.createGreenProjectile(this.player1.body.position.x+5,this.player1.position.y);
 			this.greenShot = true;
+			this.laser1.play();
         }
         
         if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot){
             this.createRedProjectile(this.player2.body.position.x-5,this.player2.position.y);
 			this.redShot = true;
+			this.laser2.play();
         }
 		
         if(!this.player2.dashing){
@@ -142,6 +148,14 @@ definatelyNotPong.scene = {
 		this.greenDashKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
         this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
 		
+		///////////////////////////////AÑADIR AUDIOS
+		///////////////////////////////AÑADIR AUDIOS
+		///////////////////////////////AÑADIR AUDIOS
+		///////////////////////////////AÑADIR AUDIOS
+		this.laser1 = this.game.add.audio("Laser1");
+		this.laser2 = this.game.add.audio("Laser2");
+		this.ballHit = this.game.add.audio("BallHit");
+		
 		this.redShot = false;
 		this.greenShot = false;
 		this.shootCD = 0.2;
@@ -163,6 +177,7 @@ definatelyNotPong.scene = {
         this.player2 = new definatelyNotPong.CharPrefab(this.game,780,100);
         this.game.add.existing(this.player2); 
 
+		//Creacion de las barreras
         this.numberOfBarriers = 5;
         for(var i = 0; i<this.numberOfBarriers; i++){
             this.createGreenBarrier(100,GameOptions.gameHeight/(this.numberOfBarriers+1) * (i+1));
@@ -173,7 +188,6 @@ definatelyNotPong.scene = {
         //======================================UI================================
         //======================================UI================================
         //======================================UI================================
-        
         this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
 		this.scoreLeft.anchor.setTo(.5);
 		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
@@ -256,26 +270,35 @@ definatelyNotPong.scene = {
         
         //collide barreras con la pelota
         this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
-			//o.kill();
             l.body.velocity.x = Math.abs(l.body.velocity.x);
-		});
+			if(!this.ballHit.isPlaying){
+				this.ballHit.play();
+			}
+		}, null, this);
         this.game.physics.arcade.overlap(this.ball, this.redBarriers, function(l,o){
-			//o.kill();
             l.body.velocity.x = Math.abs(l.body.velocity.x) * -1;
-            
-		});
+            if(!this.ballHit.isPlaying){
+				this.ballHit.play();
+			}
+		},null, this);
 		
         //collide players with ball
         this.game.physics.arcade.overlap(this.ball, this.player1, function(ball,player){
 			player.stun=true;
             ball.body.velocity.x = Math.abs(ball.body.velocity.x);
+			if(!this.ballHit.isPlaying){
+				this.ballHit.play();
+			}
             
-		});
+		},null,this);
         this.game.physics.arcade.overlap(this.ball, this.player2, function(ball,player){
 			player.stun=true;
             ball.body.velocity.x =  Math.abs(ball.body.velocity.x) * -1;
+			if(!this.ballHit.isPlaying){
+				this.ballHit.play();
+			}
             
-		});
+		},null,this);
         
         //collide players with bullet
         this.game.physics.arcade.overlap(this.redProjectiles, this.player1, function(l,o){

@@ -129,7 +129,11 @@ definatelyNotPong.scene = {
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player1);
             }
 
-            
+            else if(this.player2.powerUp == "Barrier"){
+                
+                this.createRedBarrier(this.player2.position.x-80,this.player2.position.y );
+                this.player2.powerUp=undefined;
+            }
             
             //this.player2.powerUp.USE();
         }
@@ -138,6 +142,11 @@ definatelyNotPong.scene = {
         if(this.greenPowerUpKey.isDown&&this.player1.powerUp!=undefined){
             if(this.player1.powerUp == "Slow"){
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player2);
+            }
+            
+            else if(this.player1.powerUp == "Barrier"){
+                this.createGreenBarrier(this.player1.position.x+80,this.player1.position.y );
+                this.player1.powerUp=undefined;
             }
         }
         

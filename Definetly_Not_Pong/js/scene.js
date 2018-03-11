@@ -125,12 +125,20 @@ definatelyNotPong.scene = {
         }
         
         if(this.redPowerUpKey.isDown&&this.player2.powerUp!=undefined){
-            this.player2.powerUp.USE();
+            if(this.player2.powerUp == "Slow"){
+                definatelyNotPong.SlowEnemyPowerUp.USE(this.player1);
+            }
+
+            
+            
+            //this.player2.powerUp.USE();
         }
         
                 
         if(this.greenPowerUpKey.isDown&&this.player1.powerUp!=undefined){
-            this.player2.powerUp.USE();
+            if(this.player1.powerUp == "Slow"){
+                definatelyNotPong.SlowEnemyPowerUp.USE(this.player2);
+            }
         }
         
     },
@@ -140,8 +148,8 @@ definatelyNotPong.scene = {
         this.space = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);        
         this.redShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         this.greenShotKey = this.game.input.keyboard.addKey(Phaser.Keyboard.D);
-        this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this.greenPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.redPowerUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+        this.greenPowerUpKey =  this.game.input.keyboard.addKey(Phaser.Keyboard.A);
         this.moveUpKey = this.game.input.keyboard.addKey(Phaser.Keyboard.W);
         this.moveDownKey = this.game.input.keyboard.addKey(Phaser.Keyboard.S);
         this.greenDashKey1 = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
@@ -211,6 +219,8 @@ definatelyNotPong.scene = {
         this.redSlowUI.scale.setTo(0.8);
         this.redSlowUI.alpha = 0.5;
         
+        this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
+        this.game.add.existing(this.aquamentus);
         
     },
     

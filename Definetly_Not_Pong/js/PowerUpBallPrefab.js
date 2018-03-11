@@ -1,7 +1,7 @@
 var definatelyNotPong = definatelyNotPong || {};
 
 
-definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives,powerUp){
+definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives){
 	var speed = 250;
 
     Phaser.Sprite.call(this,game,x,y,"Ball");
@@ -25,7 +25,21 @@ definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives,powerUp){
     this.body.velocity.x = 0;
     this.knockBack = new Phaser.Point(0,0);
     this.lives=lives;
-    this.powerUp=powerUp;
+    
+    var randomValue = definatelyNotPong.randomDataGen.between(0,2);
+    
+    switch(randomValue){
+        case 0:
+            this.powerUp = "Slow";
+            break;
+        case 1:
+            this.powerUp = "Barrier";
+            break;
+        case 2:
+            this.powerUp = "KameHame";
+            break;
+    }
+    
 }
 
 definatelyNotPong.PowerUpBallPrefab.prototype = Object.create(Phaser.Sprite.prototype);
@@ -89,6 +103,8 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
         ball.lives--;
         if(ball.lives<=0){
             definatelyNotPong.GetPowerUp(ball.level.player1,(ball.powerUp));
+            //ball.level.player1.powerUp = this.powerUp;
+           //console.log(ball.powerUp);
             ball.kill();
         }
 
@@ -101,8 +117,11 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
         ball.knockBack.y = projectile.body.velocity.x/5 * definatelyNotPong.randomDataGen.between(-1,1);
 
         projectile.kill();
+                    ball.lives--;
+
         if(ball.lives<=0){
             definatelyNotPong.GetPowerUp(ball.level.player2,(ball.powerUp));
+            //ball.level.player2.powerUp = this.powerUp;
             ball.kill();
         }
     }

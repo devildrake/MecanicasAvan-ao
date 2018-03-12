@@ -12,6 +12,7 @@ definatelyNotPong.scene = {
         this.load.image("Ball","img/Ball.png");
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
         this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
+		this.load.spritesheet("Dash_Cooldown", "img/dash_cooldown.png",64,64);
 		this.game.load.bitmapFont("game_font","font/game_font.png","font/game_font.fnt");
 		
 		this.load.audio("Laser1", "sfx/laser1.mp3");
@@ -85,42 +86,61 @@ definatelyNotPong.scene = {
             }
         }
         
-        //GREEN DASH
+        //REALMENTE ES EL RED DASH
+        //REALMENTE ES EL RED DASH
+        //REALMENTE ES EL RED DASH
+        //REALMENTE ES EL RED DASH
+        //REALMENTE ES EL RED DASH
         if((this.greenDashKey1.isDown || this.greenDashKey2.isDown) &&this.player2.dashCoolDown){
+			this.redDashCDUI.frame = 0;
+			this.redDashCDUI.alpha = 1;
+			this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
+					this.redDashCDUI.frame = 1;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD, function(){
+					this.redDashCDUI.frame = 2;
+					this.redDashCDUI.alpha = 0.5;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
+				
             if(this.player2.body.velocity.y>0){
+				console.log("green dash");
                 this.player2.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
-
             }else if(this.player2.body.velocity.y<0){
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
                 this.player2.body.velocity.y*=this.dashSpeedMultiplier;
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
-
-
             }
-
         }
         
-        //RED DASH
+        //REALMENTE ES EL GREEN DASH
+        //REALMENTE ES EL GREEN DASH
+        //REALMENTE ES EL GREEN DASH
+        //REALMENTE ES EL GREEN DASH
         if(this.redDashKey.isDown&&this.player1.dashCoolDown){
+			this.greenDashCDUI.frame = 0;
+			this.greenDashCDUI.alpha = 1;
+			this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
+					this.greenDashCDUI.frame = 1;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD, function(){
+					this.greenDashCDUI.frame = 2;
+					this.greenDashCDUI.alpha = 0.5;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
+			
             if(this.player1.body.velocity.y>0){
                 this.player1.dashCoolDown=false;
                 this.player1.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player1.dashing=true;
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
-
             }else if(this.player1.body.velocity.y<0){
                 this.player1.body.velocity.y*=this.dashSpeedMultiplier;
                 this.player1.dashing=true;
                 this.player1.dashCoolDown=false;
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player1);
-                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player1);
             }
         }
         
@@ -130,14 +150,10 @@ definatelyNotPong.scene = {
             }
 
             else if(this.player2.powerUp == "Barrier"){
-                
                 this.createRedBarrier(this.player2.position.x-80,this.player2.position.y );
                 this.player2.powerUp=undefined;
             }
-            
-            //this.player2.powerUp.USE();
         }
-        
                 
         if(this.greenPowerUpKey.isDown&&this.player1.powerUp!=undefined){
             if(this.player1.powerUp == "Slow"){
@@ -218,6 +234,10 @@ definatelyNotPong.scene = {
         this.greenSlowUI.anchor.setTo(.5);
         this.greenSlowUI.scale.setTo(0.8);
         this.greenSlowUI.alpha = 0.5;
+		this.greenDashCDUI = this.game.add.sprite(190, GameOptions.gameHeight-30,"Dash_Cooldown", 2);
+		this.greenDashCDUI.anchor.setTo(.5);
+		this.greenDashCDUI.scale.setTo(.8);
+		this.greenDashCDUI.alpha = 0.5;
         
         this.redStunUI = this.game.add.sprite(GameOptions.gameWidth-80, GameOptions.gameHeight-30, "Stun_Feedback",1);
         this.redStunUI.anchor.setTo(.5);
@@ -227,9 +247,16 @@ definatelyNotPong.scene = {
         this.redSlowUI.anchor.setTo(.5);
         this.redSlowUI.scale.setTo(0.8);
         this.redSlowUI.alpha = 0.5;
+		this.redDashCDUI = this.game.add.sprite(GameOptions.gameWidth-190, GameOptions.gameHeight-30, "Dash_Cooldown", 2);
+		this.redDashCDUI.anchor.setTo(.5);
+		this.redDashCDUI.scale.setTo(.8);
+		this.redDashCDUI.alpha = 0.5;
         
+		
+		/*
         this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
         this.game.add.existing(this.aquamentus);
+		*/
         
     },
     

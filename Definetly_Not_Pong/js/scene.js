@@ -12,6 +12,7 @@ definatelyNotPong.scene = {
         this.load.image("Ball","img/Ball.png");
 		this.load.image("Powerup_Rectangle", "img/powerup_square.png");
 		
+		this.load.spritesheet("Powerup_Slow_Feedback", "img/slow_powerup_feedback.png",32,32);
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
         this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
 		this.load.spritesheet("Dash_Cooldown", "img/dash_cooldown.png",64,64);
@@ -99,9 +100,13 @@ definatelyNotPong.scene = {
         //REALMENTE ES EL RED DASH
         //REALMENTE ES EL RED DASH
         if((this.greenDashKey1.isDown || this.greenDashKey2.isDown) &&this.player2.dashCoolDown){
-			this.redDashCDUI.frame = 0;
-			this.redDashCDUI.alpha = 1;
-			this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
+            if(this.player2.body.velocity.y>0){
+                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
+                this.player2.dashCoolDown=false;
+                this.player2.dashing=true;
+				this.redDashCDUI.frame = 0;
+				this.redDashCDUI.alpha = 1;
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
 					this.redDashCDUI.frame = 1;
 				},this);
 				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD, function(){
@@ -110,12 +115,6 @@ definatelyNotPong.scene = {
 				},this);
 				this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
                 this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
-				
-            if(this.player2.body.velocity.y>0){
-				console.log("green dash");
-                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
-                this.player2.dashCoolDown=false;
-                this.player2.dashing=true;
             }else if(this.player2.body.velocity.y<0){
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
@@ -259,6 +258,7 @@ definatelyNotPong.scene = {
 		this.greenPowerupRectangle.anchor.setTo(.5);
 		this.greenPowerupRectangle.scale.setTo(.8);
 		this.greenPowerupRectangle.alpha = 0.5;
+		this.greenPowerupSelected = this.game.add.sprite(250,GameOptions.gameHeight-30, "Slow_Powerup_Feedback")
         
         this.redStunUI = this.game.add.sprite(GameOptions.gameWidth-80, GameOptions.gameHeight-30, "Stun_Feedback",1);
         this.redStunUI.anchor.setTo(.5);
@@ -332,7 +332,7 @@ definatelyNotPong.scene = {
             }else{
                 
                 this.barrieraux1= this.game.add.sprite(this.player1.position.x+70,this.player1.position.y,"Barrier",0.1);
-                this.barrieraux1.alpha=0.2;
+                this.barrieraux1.alpha=0.7;
             }
             
         }
@@ -343,7 +343,7 @@ definatelyNotPong.scene = {
             }else{
                 
                 this.barrieraux2= this.game.add.sprite(this.player2.position.x-95,this.player2.position.y-27,"Barrier2",1);
-                this.barrieraux2.alpha=0.2;
+                this.barrieraux2.alpha=0.7;
             }
             
         }

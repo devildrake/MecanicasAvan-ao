@@ -23,16 +23,26 @@ definatelyNotPong.scene = {
     },
     
     inputs:function(){
-        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot){
+        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot && this.player1.canShot){
             this.createGreenProjectile(this.player1.body.position.x+5,this.player1.position.y);
 			this.greenShot = true;
 			this.laser1.play();
         }
+        else if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot && !this.player1.canShot){
+                
+                this.player1.powerUp=undefined;
+                this.player1.canShot=true;
+        }
         
-        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot){
+        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot && this.player2.canShot){
             this.createRedProjectile(this.player2.body.position.x-5,this.player2.position.y);
 			this.redShot = true;
 			this.laser2.play();
+        }
+        else if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot && !this.player2.canShot){
+                
+                this.player2.powerUp=undefined;
+                this.player2.canShot=true;
         }
 		
         if(!this.player2.dashing){
@@ -149,9 +159,11 @@ definatelyNotPong.scene = {
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player1);
             }
 
-            else if(this.player2.powerUp == "Barrier"){
-                this.createRedBarrier(this.player2.position.x-80,this.player2.position.y );
-                this.player2.powerUp=undefined;
+            else if(this.player2.powerUp == "Barrier"&& this.player2.canShot==true){
+                this.player2.canShot=false;
+                this.barrieraux2 = new definatelyNotPong.BarrierPrefab(this.game,this.player2.position.x-80,this.player2.position.y,this);
+                this.redBarriers.add( this.barrieraux2);
+               
             }
         }
                 
@@ -160,9 +172,12 @@ definatelyNotPong.scene = {
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player2);
             }
             
-            else if(this.player1.powerUp == "Barrier"){
-                this.createGreenBarrier(this.player1.position.x+80,this.player1.position.y );
-                this.player1.powerUp=undefined;
+            else if(this.player1.powerUp == "Barrier" && this.player1.canShot==true){
+                this.player1.canShot=false;
+                this.barrieraux1 = new definatelyNotPong.BarrierPrefab(this.game,this.player1.position.x+80,this.player1.position.y,this);
+                this.greenBarriers.add( this.barrieraux1);
+                
+                
             }
         }
         
@@ -253,10 +268,10 @@ definatelyNotPong.scene = {
 		this.redDashCDUI.alpha = 0.5;
         
 		
-		/*
+		
         this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
         this.game.add.existing(this.aquamentus);
-		*/
+		
         
     },
     
@@ -300,6 +315,15 @@ definatelyNotPong.scene = {
         else{
             this.redSlowUI.frame = 1;
             this.redSlowUI.alpha = 0.5;
+        }
+        
+        if(!this.player1.canShot){
+            this.barrieraux1.position.x=this.player1.position.x+80;
+            this.barrieraux1.position.y=this.player1.position.y;
+        }
+         if(!this.player2.canShot){
+            this.barrieraux2.position.x=this.player2.position.x-80;
+            this.barrieraux2.position.y=this.player2.position.y;
         }
         
         

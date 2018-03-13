@@ -280,9 +280,10 @@ definatelyNotPong.scene = {
 		this.redPowerupSelected = this.game.add.sprite(GameOptions.gameWidth-250, GameOptions.gameHeight-30, "Powerup_Selected_Feedback", 0);
 		this.redPowerupSelected.anchor.setTo(.5);
 		 
-		
-        this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
-        this.game.add.existing(this.aquamentus);
+		//TEXTOS ANTES DE INICIAR LA PARTIDA
+		//definatelyNotPong.game.input.onDown.add(GameOptions.Unpause(this));
+		//this.startText = this.game.add.bitmapText(GameOptions.gameWidth/2,GameOptions.gameHeight/2,"game_font","Partida a 10 puntos\nPulsa cualquier tecla para iniciar",50);
+		//this.startText.anchor.setTo(.5);
 		
         
     },

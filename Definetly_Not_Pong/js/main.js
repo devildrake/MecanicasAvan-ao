@@ -4,7 +4,10 @@ var GameOptions = {
     gameWidth:800,
     gameHeight:540,
     ballBaseVelocity:new Phaser.Point(-40,20),
-    score:new Phaser.Point(0,0)
+    score:new Phaser.Point(0,0),
+	Unpause:function(level){
+		definatelyNotPong.game.paused = false;
+	}
 };
 
 
@@ -16,4 +19,5 @@ definatelyNotPong.GetPowerUp=function(player,powerUp){
     
 }
 definatelyNotPong.game.state.add("scene", definatelyNotPong.scene);
-definatelyNotPong.game.state.start("scene");
+definatelyNotPong.game.state.add("start", definatelyNotPong.start);
+definatelyNotPong.game.state.start("start");

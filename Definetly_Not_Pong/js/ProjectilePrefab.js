@@ -39,5 +39,6 @@ definatelyNotPong.ProjectilePrefab.prototype.update = function(){
 		ball.body.velocity.x = ball.body.velocity.x + collisionVec.x * 50;
 		ball.body.velocity.y = ball.body.velocity.y + collisionVec.y * 250;
 		projectile.kill();
-	});
+		this.level.laserHit.play();
+	},null, this);
 }

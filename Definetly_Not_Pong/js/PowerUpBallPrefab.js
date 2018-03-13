@@ -18,6 +18,7 @@ definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives){
     this.speed = 50;
     this.body.gravity.y = 0;
     this.threshold = 5;
+	this.destroySoundPlayed = false;
 
     //this.goalPositionX = GameOptions.gameWidth/2;
     //this.goalPositionY = GameOptions.gameHeight/2;
@@ -64,17 +65,15 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
     desiredVelocity.y/=magnitude;
     
     if(Math.abs(this.goal.x-this.position.x)>this.threshold){
-        
         both=false;
         this.body.velocity.x = desiredVelocity.x * this.speed + this.knockBack.x;
-        
     }else{
         this.body.velocity.x=0;
     }
         
     if(Math.abs(this.goal.y-this.position.y)>this.threshold){
         both=false;
-                this.body.velocity.y = desiredVelocity.y * this.speed + this.knockBack.y;
+        this.body.velocity.y = desiredVelocity.y * this.speed + this.knockBack.y;
 
     }else{
         this.body.velocity.y=0;
@@ -96,22 +95,22 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
     }
     
     this.game.physics.arcade.collide(this, this.level.greenProjectiles, function(ball, projectile){
-        //console.log("BRUH");
         ball.knockBack.x = projectile.body.velocity.x/5;
         ball.knockBack.y = projectile.body.velocity.x/5 * definatelyNotPong.randomDataGen.between(-1,1);
         projectile.kill();
         ball.lives--;
         if(ball.lives<=0){
             definatelyNotPong.GetPowerUp(ball.level.player1,(ball.powerUp));
-            //ball.level.player1.powerUp = this.powerUp;
-           //console.log(ball.powerUp);
             ball.kill();
+			if(!this.destroySoundPlayed){
+				this.level.powerupTaken.play();
+				this.destroySoundPlayed = true;
+			}
         }
-
-    }
-    );
+		this.level.laserHit.play();
+    },null,this);
     
-        this.game.physics.arcade.collide(this, this.level.redProjectiles, function(ball, projectile){
+	this.game.physics.arcade.collide(this, this.level.redProjectiles, function(ball, projectile){
         //console.log("BRUH");
         ball.knockBack.x = projectile.body.velocity.x/5;
         ball.knockBack.y = projectile.body.velocity.x/5 * definatelyNotPong.randomDataGen.between(-1,1);
@@ -121,13 +120,14 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
 
         if(ball.lives<=0){
             definatelyNotPong.GetPowerUp(ball.level.player2,(ball.powerUp));
-            //ball.level.player2.powerUp = this.powerUp;
             ball.kill();
+			if(!this.destroySoundPlayed){
+				this.level.powerupTaken.play();
+				this.destroySoundPlayed = true;
+			}
         }
-    }
-    );
-    
-    
+		this.level.laserHit.play();
+    },null,this);
 }
 
 

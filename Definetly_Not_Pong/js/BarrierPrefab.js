@@ -28,7 +28,8 @@ definatelyNotPong.BarrierPrefab.prototype.constructor = definatelyNotPong.Barrie
 definatelyNotPong.BarrierPrefab.prototype.update = function(){    
     if(this.Health<=0){
         this.Alive=false;
-        this.kill();
+		this.level.barrierDestroyed.play();
+        this.destroy();
     }
 	if(this.Health == 1){
 		this.tint = "0x000000"

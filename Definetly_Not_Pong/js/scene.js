@@ -10,14 +10,21 @@ definatelyNotPong.scene = {
         this.load.image("Nave","img/player.png");
         this.load.image("Nave2","img/player2.png");
         this.load.image("Ball","img/Ball.png");
+		this.load.image("Powerup_Rectangle", "img/powerup_square.png");
+		
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
         this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
 		this.load.spritesheet("Dash_Cooldown", "img/dash_cooldown.png",64,64);
+		
 		this.game.load.bitmapFont("game_font","font/game_font.png","font/game_font.fnt");
 		
 		this.load.audio("Laser1", "sfx/laser1.mp3");
 		this.load.audio("Laser2", "sfx/laser2.mp3");
 		this.load.audio("BallHit", "sfx/ball_hit.mp3");
+		this.load.audio("LaserHit", "sfx/laser_hit.mp3");
+		this.load.audio("BarrierDestroyed", "sfx/barrier_destroyed.mp3");
+		this.load.audio("Powerup_Taken", "sfx/powerup_taken.mp3");
+		
         this.loadProjectiles();
         this.loadBarriers();
     },
@@ -201,8 +208,16 @@ definatelyNotPong.scene = {
 		///////////////////////////////AÑADIR AUDIOS
 		///////////////////////////////AÑADIR AUDIOS
 		this.laser1 = this.game.add.audio("Laser1");
+		this.laser1.volume = 0.6;
 		this.laser2 = this.game.add.audio("Laser2");
+		this.laser2.volume = 0.6;
 		this.ballHit = this.game.add.audio("BallHit");
+		this.ballHit.volume = 0.3;
+		this.laserHit = this.game.add.audio("LaserHit");
+		this.laserHit.volume = 0.5;
+		this.barrierDestroyed = this.game.add.audio("BarrierDestroyed");
+		this.powerupTaken = this.game.add.audio("Powerup_Taken");
+		this.powerupTaken.volume = 0.5;
 		
 		this.redShot = false;
 		this.greenShot = false;
@@ -236,9 +251,9 @@ definatelyNotPong.scene = {
         //======================================UI================================
         //======================================UI================================
         //======================================UI================================
-        this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10, 30, "game_font",""+GameOptions.score.x,50);
+        this.scoreLeft = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*3, 30, "game_font",""+GameOptions.score.x,50);
 		this.scoreLeft.anchor.setTo(.5);
-		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*9,30,"game_font",""+GameOptions.score.y,50);
+		this.scoreRight = definatelyNotPong.game.add.bitmapText(GameOptions.gameWidth/10*7,30,"game_font",""+GameOptions.score.y,50);
 		this.scoreRight.anchor.setTo(.5);
         
         this.greenStunUI = this.game.add.sprite(80,GameOptions.gameHeight-30,"Stun_Feedback",1);
@@ -253,6 +268,10 @@ definatelyNotPong.scene = {
 		this.greenDashCDUI.anchor.setTo(.5);
 		this.greenDashCDUI.scale.setTo(.8);
 		this.greenDashCDUI.alpha = 0.5;
+		this.greenPowerupRectangle = this.game.add.sprite(250,GameOptions.gameHeight-30,"Powerup_Rectangle");
+		this.greenPowerupRectangle.anchor.setTo(.5);
+		this.greenPowerupRectangle.scale.setTo(.8);
+		this.greenPowerupRectangle.alpha = 0.5;
         
         this.redStunUI = this.game.add.sprite(GameOptions.gameWidth-80, GameOptions.gameHeight-30, "Stun_Feedback",1);
         this.redStunUI.anchor.setTo(.5);
@@ -266,8 +285,11 @@ definatelyNotPong.scene = {
 		this.redDashCDUI.anchor.setTo(.5);
 		this.redDashCDUI.scale.setTo(.8);
 		this.redDashCDUI.alpha = 0.5;
-        
-		
+		this.redPowerupRectangle = this.game.add.sprite(GameOptions.gameWidth-250, GameOptions.gameHeight-30,"Powerup_Rectangle");
+        this.redPowerupRectangle.anchor.setTo(.5);
+		this.redPowerupRectangle.scale.setTo(.8);
+		this.redPowerupRectangle.alpha = 0.5;
+		 
 		
         this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
         this.game.add.existing(this.aquamentus);
@@ -330,13 +352,14 @@ definatelyNotPong.scene = {
         this.game.physics.arcade.overlap(this.redProjectiles, this.greenBarriers, function(o,l){
 			o.kill();
             l.Health--;
-            console.log(l);
-		});
+            this.laserHit.play();
+		},null,this);
         
         this.game.physics.arcade.overlap(this.greenProjectiles, this.redBarriers, function(o,l){
 			o.kill();
             l.Health--;
-		});
+			this.laserHit.play();
+		},null, this);
         
         //collide barreras con la pelota
         this.game.physics.arcade.overlap(this.ball, this.greenBarriers, function(l,o){
@@ -374,11 +397,13 @@ definatelyNotPong.scene = {
         this.game.physics.arcade.overlap(this.redProjectiles, this.player1, function(l,o){
 			o.kill();
             l.slow=true;
-		});
+			this.laserHit.play();
+		},null, this);
         this.game.physics.arcade.overlap(this.greenProjectiles, this.player2, function(l,o){
 			o.kill();
             l.slow=true;
-		});
+			this.laserHit.play();
+		}, null, this);
         
 		//CONTROL DE LOS DISPAROS PARA QUE LOS HAGAN LIMITADAMENTE CON COOLDOWN
 		//CONTROL DE LOS DISPAROS PARA QUE LOS HAGAN LIMITADAMENTE CON COOLDOWN

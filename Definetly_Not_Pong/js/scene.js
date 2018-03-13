@@ -12,7 +12,7 @@ definatelyNotPong.scene = {
         this.load.image("Ball","img/Ball.png");
 		this.load.image("Powerup_Rectangle", "img/powerup_square.png");
 		
-		this.load.spritesheet("Powerup_Slow_Feedback", "img/slow_powerup_feedback.png",32,32);
+		this.load.spritesheet("Powerup_Selected_Feedback", "img/powerup_feedback.png",32,32);
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
         this.load.spritesheet("Slow_Feedback", "img/slow_feedback.png",64,64);
 		this.load.spritesheet("Dash_Cooldown", "img/dash_cooldown.png",64,64);
@@ -258,7 +258,8 @@ definatelyNotPong.scene = {
 		this.greenPowerupRectangle.anchor.setTo(.5);
 		this.greenPowerupRectangle.scale.setTo(.8);
 		this.greenPowerupRectangle.alpha = 0.5;
-		this.greenPowerupSelected = this.game.add.sprite(250,GameOptions.gameHeight-30, "Slow_Powerup_Feedback")
+		this.greenPowerupSelected = this.game.add.sprite(250,GameOptions.gameHeight-30, "Powerup_Selected_Feedback",0);
+		this.greenPowerupSelected.anchor.setTo(.5);
         
         this.redStunUI = this.game.add.sprite(GameOptions.gameWidth-80, GameOptions.gameHeight-30, "Stun_Feedback",1);
         this.redStunUI.anchor.setTo(.5);
@@ -276,6 +277,8 @@ definatelyNotPong.scene = {
         this.redPowerupRectangle.anchor.setTo(.5);
 		this.redPowerupRectangle.scale.setTo(.8);
 		this.redPowerupRectangle.alpha = 0.5;
+		this.redPowerupSelected = this.game.add.sprite(GameOptions.gameWidth-250, GameOptions.gameHeight-30, "Powerup_Selected_Feedback", 0);
+		this.redPowerupSelected.anchor.setTo(.5);
 		 
 		
         this.aquamentus = new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2,GameOptions.gameHeight/2+30,this,1);
@@ -325,6 +328,27 @@ definatelyNotPong.scene = {
             this.redSlowUI.frame = 1;
             this.redSlowUI.alpha = 0.5;
         }
+		//feedback de que powerup tienes cogido
+		if(this.player1.powerUp == "Barrier"){
+			this.greenPowerupSelected.frame = 2;
+		}
+		else if(this.player1.powerUp == "Slow"){
+			this.greenPowerupSelected.frame = 1;
+		}
+		else{
+			this.greenPowerupSelected.frame = 0;
+		}
+		
+		if(this.player2.powerUp == "Barrier"){
+			this.redPowerupSelected.frame = 2;
+		}
+		else if(this.player2.powerUp == "Slow"){
+			this.greenPowerupSelected.frame = 1;
+		}
+		else{
+			this.redPowerupSelected.frame = 0;
+		}
+		
         if(this.player1.powerUp == "Barrier"){
             if(this.barrieraux1){
                 this.barrieraux1.position.x=this.player1.position.x+65

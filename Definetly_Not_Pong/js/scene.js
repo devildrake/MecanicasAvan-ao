@@ -170,7 +170,7 @@ definatelyNotPong.scene = {
 
             else if(this.player2.powerUp == "Barrier"){
                 this.createRedBarrier(this.player2.position.x-80,this.player2.position.y );
-                this.barrieraux2.destroy();
+                this.barrieraux2.kill();
                 this.player2.powerUp=undefined;
             }
         }
@@ -178,12 +178,12 @@ definatelyNotPong.scene = {
         if(this.greenPowerUpKey.isDown&&this.player1.powerUp!=undefined){
             if(this.player1.powerUp == "Slow"){
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player2);
-                this.player2.powerUp=undefined;
+                this.player1.powerUp=undefined;
             }
             
             else if(this.player1.powerUp == "Barrier"){
                 this.createGreenBarrier(this.player1.position.x+80,this.player1.position.y );
-                this.barrieraux1.destroy();
+                this.barrieraux1.kill();
                 this.player1.powerUp=undefined;
             }
         }
@@ -206,6 +206,7 @@ definatelyNotPong.scene = {
         
         this.redHasBarrier = false;
         this.greenHasBarrier = false;
+        this.thereIsPowerup = false;
         
 		///////////////////////////////AÑADIR AUDIOS
 		///////////////////////////////AÑADIR AUDIOS
@@ -296,7 +297,10 @@ definatelyNotPong.scene = {
 		this.redPowerupRectangle.scale.setTo(.8);
 		this.redPowerupRectangle.alpha = 0.5;
 		this.redPowerupSelected = this.game.add.sprite(GameOptions.gameWidth-250, GameOptions.gameHeight-30, "Powerup_Selected_Feedback", 0);
-		this.redPowerupSelected.anchor.setTo(.5);       
+		this.redPowerupSelected.anchor.setTo(.5); 
+        
+        //probabilidad para que aparezca un nuevo powerup
+        this.powerupSpawnProbability = 0.01;
     },
     
     update:function(){
@@ -369,10 +373,10 @@ definatelyNotPong.scene = {
 		
         if(this.player1.powerUp == "Barrier"){
             if(this.barrieraux1){
+                this.barrieraux1.reset(this.player1.position.x+70,this.player1.position.y);
                 this.barrieraux1.position.x=this.player1.position.x+65
                 this.barrieraux1.position.y=this.player1.position.y-27;
             }else{
-                
                 this.barrieraux1= this.game.add.sprite(this.player1.position.x+70,this.player1.position.y,"Barrier",0.1);
                 this.barrieraux1.alpha=0.7;
             }
@@ -380,6 +384,7 @@ definatelyNotPong.scene = {
         }
         if(this.player2.powerUp == "Barrier"){
              if(this.barrieraux2){
+                 this.barrieraux1.reset(this.player2.position.x+70,this.player2.position.y);
                 this.barrieraux2.position.x=this.player2.position.x-95;
                 this.barrieraux2.position.y=this.player2.position.y-27;
             }else{
@@ -466,6 +471,18 @@ definatelyNotPong.scene = {
 			}
 		}
         
+        //SPAWN DE LOS POWERUPS
+        //SPAWN DE LOS POWERUPS
+        //SPAWN DE LOS POWERUPS
+        //SPAWN DE LOS POWERUPS
+        //SPAWN DE LOS POWERUPS
+        //SPAWN DE LOS POWERUPS
+        if(!this.thereIsPowerup){
+            if(Math.random() < this.powerupSpawnProbability){
+                this.CreatePowerup();
+            }
+        }        
+        
         //CONDICIONES DE FINAL DE PARTIDA
         //CONDICIONES DE FINAL DE PARTIDA
         //CONDICIONES DE FINAL DE PARTIDA
@@ -494,6 +511,7 @@ definatelyNotPong.scene = {
     
     CreatePowerup:function(){
         this.game.add.existing(new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2, 40,this,5));
+        this.thereIsPowerup = true;
     },
     
     createRedBarrier:function(posX,posY){

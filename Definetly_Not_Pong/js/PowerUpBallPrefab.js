@@ -102,6 +102,7 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
 			if(!this.destroySoundPlayed){
 				this.level.powerupTaken.play();
 				this.destroySoundPlayed = true;
+                this.level.thereIsPowerup = false;
 			}
         }
 		this.level.laserHit.play();
@@ -120,6 +121,7 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
 			if(!this.destroySoundPlayed){
 				this.level.powerupTaken.play();
 				this.destroySoundPlayed = true;
+                this.level.thereIsPowerup = false;
 			}
             this.kill();
         }

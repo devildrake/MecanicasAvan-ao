@@ -102,7 +102,7 @@ definatelyNotPong.scene = {
         //REALMENTE ES EL RED DASH
         if((this.greenDashKey1.isDown || this.greenDashKey2.isDown) &&this.player2.dashCoolDown){
             if(this.player2.body.velocity.y>0){
-                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
+                this.player2.body.velocity.y=this.player2.baseVelocity*this.dashSpeedMultiplier;
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
 				this.redDashCDUI.frame = 0;
@@ -119,7 +119,7 @@ definatelyNotPong.scene = {
             }else if(this.player2.body.velocity.y<0){
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
-                this.player2.body.velocity.y*=this.dashSpeedMultiplier;
+                this.player2.body.velocity.y=-this.player2.baseVelocity*this.dashSpeedMultiplier;
                 this.redDashCDUI.frame = 0;
 				this.redDashCDUI.alpha = 1;
 				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
@@ -153,10 +153,10 @@ definatelyNotPong.scene = {
 			
             if(this.player1.body.velocity.y>0){
                 this.player1.dashCoolDown=false;
-                this.player1.body.velocity.y*=this.dashSpeedMultiplier;
+                this.player1.body.velocity.y=this.player1.baseVelocity*this.dashSpeedMultiplier;
                 this.player1.dashing=true;
             }else if(this.player1.body.velocity.y<0){
-                this.player1.body.velocity.y*=this.dashSpeedMultiplier;
+                this.player1.body.velocity.y=-this.player1.baseVelocity*this.dashSpeedMultiplier;
                 this.player1.dashing=true;
                 this.player1.dashCoolDown=false;
             }
@@ -384,7 +384,7 @@ definatelyNotPong.scene = {
         }
         if(this.player2.powerUp == "Barrier"){
              if(this.barrieraux2){
-                 this.barrieraux1.reset(this.player2.position.x+70,this.player2.position.y);
+                this.barrieraux2.reset(this.player2.position.x+70,this.player2.position.y);
                 this.barrieraux2.position.x=this.player2.position.x-95;
                 this.barrieraux2.position.y=this.player2.position.y-27;
             }else{

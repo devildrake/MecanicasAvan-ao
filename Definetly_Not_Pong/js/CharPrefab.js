@@ -17,6 +17,7 @@ definatelyNotPong.CharPrefab = function(game,x,y,level){
     this.level = level;
     this.Alive = true;
     this.velocity=250;
+	this.baseVelocity = this.velocity;
     this.dashCoolDown=true;
     this.powerUp;
     this.stun=false;

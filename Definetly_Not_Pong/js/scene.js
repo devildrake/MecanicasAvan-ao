@@ -11,6 +11,7 @@ definatelyNotPong.scene = {
         this.load.image("Nave2","img/player2.png");
         this.load.image("Ball","img/Ball.png");
 		this.load.image("Powerup_Rectangle", "img/powerup_square.png");
+        this.load.image("Powerup", "img/powerup.png");
 		
 		this.load.spritesheet("Powerup_Selected_Feedback", "img/powerup_feedback.png",32,32);
         this.load.spritesheet("Stun_Feedback", "img/stun_feedback.png",64,64);
@@ -31,13 +32,13 @@ definatelyNotPong.scene = {
     },
     
     inputs:function(){
-        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot){
+        if(this.greenShotKey.isDown&&this.greenShotKey.downDuration(1) && !this.greenShot && !this.greenHasBarrier){
             this.createGreenProjectile(this.player1.body.position.x+5,this.player1.position.y);
 			this.greenShot = true;
 			this.laser1.play();
         }
         
-        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot){
+        if(this.redShotKey.isDown&&this.redShotKey.downDuration(1) && !this.redShot && !this.redHasBarrier){
             this.createRedProjectile(this.player2.body.position.x-5,this.player2.position.y);
 			this.redShot = true;
 			this.laser2.play();
@@ -164,6 +165,7 @@ definatelyNotPong.scene = {
         if(this.redPowerUpKey.isDown&&this.player2.powerUp!=undefined){
             if(this.player2.powerUp == "Slow"){
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player1);
+                this.player2.powerUp=undefined;
             }
 
             else if(this.player2.powerUp == "Barrier"){
@@ -176,6 +178,7 @@ definatelyNotPong.scene = {
         if(this.greenPowerUpKey.isDown&&this.player1.powerUp!=undefined){
             if(this.player1.powerUp == "Slow"){
                 definatelyNotPong.SlowEnemyPowerUp.USE(this.player2);
+                this.player2.powerUp=undefined;
             }
             
             else if(this.player1.powerUp == "Barrier"){
@@ -200,6 +203,9 @@ definatelyNotPong.scene = {
 		this.greenDashKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
         this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
         this.restartKey = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+        
+        this.redHasBarrier = false;
+        this.greenHasBarrier = false;
         
 		///////////////////////////////AÑADIR AUDIOS
 		///////////////////////////////AÑADIR AUDIOS
@@ -337,22 +343,28 @@ definatelyNotPong.scene = {
 		//feedback de que powerup tienes cogido
 		if(this.player1.powerUp == "Barrier"){
 			this.greenPowerupSelected.frame = 2;
+            this.greenHasBarrier = true;
 		}
 		else if(this.player1.powerUp == "Slow"){
 			this.greenPowerupSelected.frame = 1;
+            this.greenHasBarrier = false;
 		}
 		else{
 			this.greenPowerupSelected.frame = 0;
+            this.greenHasBarrier = false;
 		}
 		
 		if(this.player2.powerUp == "Barrier"){
 			this.redPowerupSelected.frame = 2;
+            this.redHasBarrier = true;
 		}
 		else if(this.player2.powerUp == "Slow"){
-			this.greenPowerupSelected.frame = 1;
+			this.redPowerupSelected.frame = 1;
+            this.redHasBarrier = false;
 		}
 		else{
 			this.redPowerupSelected.frame = 0;
+            this.redHasBarrier = false;
 		}
 		
         if(this.player1.powerUp == "Barrier"){
@@ -478,6 +490,10 @@ definatelyNotPong.scene = {
             }
         }
 		
+    },
+    
+    CreatePowerup:function(){
+        this.game.add.existing(new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2, 40,this,5));
     },
     
     createRedBarrier:function(posX,posY){

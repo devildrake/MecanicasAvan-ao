@@ -4,16 +4,13 @@ var definatelyNotPong = definatelyNotPong || {};
 definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives){
 	var speed = 250;
 
-    Phaser.Sprite.call(this,game,x,y,"Ball");
+    Phaser.Sprite.call(this,game,x,y,"Powerup");
     this.game.physics.arcade.enable(this);
     this.body.velocity.x = speed;
     this.type = 0; //type 0 proyectil verde
 	
 	this.Alive = true;
-	this.scale.setTo(3);
 	this.anchor.setTo(.5);
-	//this.checkWorldBounds = true;
-	//this.outOfBoundsKill = true;
 	this.level = level;
     this.speed = 50;
     this.body.gravity.y = 0;
@@ -27,7 +24,7 @@ definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives){
     this.knockBack = new Phaser.Point(0,0);
     this.lives=lives;
     
-    var randomValue = definatelyNotPong.randomDataGen.between(0,2);
+    var randomValue = definatelyNotPong.randomDataGen.between(0,1);
     
     switch(randomValue){
         case 0:
@@ -116,15 +113,15 @@ definatelyNotPong.PowerUpBallPrefab.prototype.update = function(){
         ball.knockBack.y = projectile.body.velocity.x/5 * definatelyNotPong.randomDataGen.between(-1,1);
 
         projectile.kill();
-                    ball.lives--;
+        ball.lives--;
 
         if(ball.lives<=0){
             definatelyNotPong.GetPowerUp(ball.level.player2,(ball.powerUp));
-            ball.kill();
 			if(!this.destroySoundPlayed){
 				this.level.powerupTaken.play();
 				this.destroySoundPlayed = true;
 			}
+            this.kill();
         }
 		this.level.laserHit.play();
     },null,this);

@@ -510,7 +510,7 @@ definatelyNotPong.scene = {
     },
     
     CreatePowerup:function(){
-        this.game.add.existing(new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2, 40,this,5));
+        this.game.add.existing(new definatelyNotPong.PowerUpBallPrefab(this.game,GameOptions.gameWidth/2, Math.random()*((GameOptions.gameHeight-20)-20)+20,this,5));
         this.thereIsPowerup = true;
     },
     

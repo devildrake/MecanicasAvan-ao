@@ -119,6 +119,17 @@ definatelyNotPong.scene = {
                 this.player2.dashCoolDown=false;
                 this.player2.dashing=true;
                 this.player2.body.velocity.y*=this.dashSpeedMultiplier;
+                this.redDashCDUI.frame = 0;
+				this.redDashCDUI.alpha = 1;
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD/2,function(){
+					this.redDashCDUI.frame = 1;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD, function(){
+					this.redDashCDUI.frame = 2;
+					this.redDashCDUI.alpha = 0.5;
+				},this);
+				this.game.time.events.add(Phaser.Timer.SECOND * this.dashTime,definatelyNotPong.CharPrefab.SetNotDashing, this.level,this.player2);
+                this.game.time.events.add(Phaser.Timer.SECOND * this.dashCD,definatelyNotPong.CharPrefab.ResetCoolDownDash, this.level,this.player2);
             }
         }
         

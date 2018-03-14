@@ -388,7 +388,6 @@ definatelyNotPong.scene = {
                 this.barrieraux2.position.x=this.player2.position.x-95;
                 this.barrieraux2.position.y=this.player2.position.y-27;
             }else{
-                
                 this.barrieraux2= this.game.add.sprite(this.player2.position.x-95,this.player2.position.y-27,"Barrier2",1);
                 this.barrieraux2.alpha=0.7;
             }

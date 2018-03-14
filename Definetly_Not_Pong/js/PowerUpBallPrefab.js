@@ -11,6 +11,7 @@ definatelyNotPong.PowerUpBallPrefab = function(game,x,y,level,lives){
 	
 	this.Alive = true;
 	this.anchor.setTo(.5);
+	this.alpha = 0.8;
 	this.level = level;
     this.speed = 50;
     this.body.gravity.y = 0;

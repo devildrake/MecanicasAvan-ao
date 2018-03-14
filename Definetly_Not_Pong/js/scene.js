@@ -199,7 +199,8 @@ definatelyNotPong.scene = {
         this.greenDashKey1 = this.game.input.keyboard.addKey(Phaser.Keyboard.INSERT);
 		this.greenDashKey2 = this.game.input.keyboard.addKey(Phaser.Keyboard.NUMPAD_0);
         this.redDashKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SHIFT);
-		
+        this.restartKey = this.game.input.keyboard.addKey(Phaser.Keyboard.R);
+        
 		///////////////////////////////AÑADIR AUDIOS
 		///////////////////////////////AÑADIR AUDIOS
 		///////////////////////////////AÑADIR AUDIOS
@@ -289,14 +290,7 @@ definatelyNotPong.scene = {
 		this.redPowerupRectangle.scale.setTo(.8);
 		this.redPowerupRectangle.alpha = 0.5;
 		this.redPowerupSelected = this.game.add.sprite(GameOptions.gameWidth-250, GameOptions.gameHeight-30, "Powerup_Selected_Feedback", 0);
-		this.redPowerupSelected.anchor.setTo(.5);
-		 
-		//TEXTOS ANTES DE INICIAR LA PARTIDA
-		//definatelyNotPong.game.input.onDown.add(GameOptions.Unpause(this));
-		//this.startText = this.game.add.bitmapText(GameOptions.gameWidth/2,GameOptions.gameHeight/2,"game_font","Partida a 10 puntos\nPulsa cualquier tecla para iniciar",50);
-		//this.startText.anchor.setTo(.5);
-		
-        
+		this.redPowerupSelected.anchor.setTo(.5);       
     },
     
     update:function(){
@@ -459,6 +453,30 @@ definatelyNotPong.scene = {
 				this.redCDTimer = 0;
 			}
 		}
+        
+        //CONDICIONES DE FINAL DE PARTIDA
+        //CONDICIONES DE FINAL DE PARTIDA
+        //CONDICIONES DE FINAL DE PARTIDA
+        //CONDICIONES DE FINAL DE PARTIDA
+        //CONDICIONES DE FINAL DE PARTIDA
+        //CONDICIONES DE FINAL DE PARTIDA
+        if(this.scoreLeft.text == "10"){
+            console.log("GREEN PLAYER WINS");
+            this.game.add.bitmapText(GameOptions.gameWidth/2, GameOptions.gameHeight/2-100,"game_font","VICTORIA DEL\nJUGADOR VERDE",55).anchor.setTo(.5);
+            this.game.add.bitmapText(GameOptions.gameWidth/2, GameOptions.gameWidth/2,"game_font", "Pulsa R para volver a jugar", 20).anchor.setTo(.5);
+            this.ball.destroy();
+            if(this.restartKey.isDown){
+                this.game.state.start("start");
+            }
+        }else if(this.scoreRight.text == "10"){
+            console.log("RED PLAYER WINS");
+            this.game.add.bitmapText(GameOptions.gameWidth/2, GameOptions.gameHeight/2-100,"game_font","VICTORIA DEL\nJUGADOR ROJO",55).anchor.setTo(.5);
+            this.game.add.bitmapText(GameOptions.gameWidth/2, GameOptions.gameWidth/2,"game_font", "Pulsa R para volver a jugar", 20).anchor.setTo(.5);
+            this.ball.destroy();
+            if(this.restartKey.isDown){
+                this.game.state.start("start");
+            }
+        }
 		
     },
     
